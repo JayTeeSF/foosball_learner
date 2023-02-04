@@ -8,7 +8,7 @@
   </style>
   <script>
     var OBJECT_PROP = null;
-    var THRESHOLD = 255;
+    var THRESHOLD = 40;
     var SIZE = 300;
     var MAX_X = SIZE;
     var MAX_Y = SIZE;
@@ -23,7 +23,7 @@
     
     function main() {
       CANVAS = document.getElementById('camera');
-      updateThreshold(THRESHOLD);
+      document.getElementById('thresholdCtrl').value = THRESHOLD;
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
       var constraints = { video: true };
