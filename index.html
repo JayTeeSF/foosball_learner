@@ -20,6 +20,7 @@
     var CONTEXT_ATTRS = { willReadFrequently: true };
     var COORD_HISTORY = [];
     var MOVE_TO_HISTORY = [];
+    
     function main() {
       CANVAS = document.getElementById('camera');
       CANVAS.width = MAX_X;
@@ -40,6 +41,14 @@
       );
     }
 
+    function updateThreshold() {
+      thresholdControl = document.getElementById('thresholdCtrl');
+      console.log(`thresholdControl.value: ${thresholdControl.value}; THRESHOLD: ${THRESHOLD}`);
+      THRESHOLD=thresholdControl.value;
+      console.log(`new THRESHOLD: ${THRESHOLD}`);
+      return true;
+    }
+    
     function updateImage(video) {
       var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
       //context.drawImage(video, 0, 0, SIZE, SIZE);
@@ -265,7 +274,7 @@
     <div id="output"> ? </div>
     <br />
     <input id="objectName" type="text" placeholder="what is this?" />
-    <input id="threshold" type="number" placeholder="New Threshold" onclick="console.log(THRESHOLD); THRESHOLD=this.value; console.log(THRESHOLD);"/>
+    <input id="thresholdCtrl" type="number" min="0" max="255" onclick="updateThreshold();" />
     <button class="button"> Learn </button>
   </center>
 </body>
