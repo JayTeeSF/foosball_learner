@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<head>
+  <title>Foosball training from video</title>
+  <style>
+    canvas {
+      border: solid 2px;
+    }
+  </style>
+  <script>
+    var OBJECT_PROP = null;
+    var THRESHOLD = 125;
+    var SIZE = 300;
+    var MAX_X = SIZE;
+    var MAX_Y = SIZE;
+    var PLAYER_ROW_1 = MAX_Y / 7;
+    var PLAYER_ROW_2 = 3 * MAX_Y / 7;
+    var PLAYER_ROW_3 = 5 * MAX_Y / 7;
+    var CANVAS = null;
+    var INTERVAL = 42; //ms
+    var CONTEXT_ATTRS = { willReadFrequently: true };
+    var COORD_HISTORY = [];
+    var MOVE_TO_HISTORY = [];
+    function main() {
+      CANVAS = document.getElementById('camera');
+      CANVAS.width = MAX_X;
+      CANVAS.height = MAX_Y;
+      var constraints = { video: true };
+      var permission = navigator.mediaDevices.getUserMedia(constraints);
+      permission.then(
+        function(stream) {
+          var video = document.createElement('video');
+          video.srcObject = stream;
+          video.play();
+          setInterval(updateImage, INTERVAL, video);
+        }
+      ).catch(
+        function(err) {
+          alert("camera error");
+        }
+      );
+    }
+
+    function updateImage(video) {
+      var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
+      //context.drawImage(video, 0, 0, SIZE, SIZE);
+      //return
+      var minSize = Math.min(video.videoWidth, video.videoHeight);
+      var startX = (video.videoWidth - minSize) / 2;
+      var startY = (video.videoHeight - minSize) / 2;
+      context.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
+
+      var image = context.getImageData(0, 0, MAX_X, MAX_Y);
+      var matrix = getPixelMatrix(image.data);
+      processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
+    }
+
+    function processMatrix(matrix) {
+      isolateObject(matrix);
+      var box = getBoundingBox(matrix);
+      var boxProp = getBoxProperties(box);
+      OBJECT_PROP = boxProp.aspectRatio;
+      // once we have the properties we have the centerX & centerY of the ball (in theory)
+      COORD_HISTORY.push([OBJECT_PROP.centerX, OBJECT_PROP.centerY]);
+      if (COORD_HISTORY.length > 1) {
+        let lastPos = COORD_HISTORY.length - 1;
+        let secondLastPos = COORD_HISTORY.length - 2;
+        calculateMove(lastPos, secondLastPos);
+      } else {
+        console.log("Need more coordinates...");
+      }
+
+      updateCanvas(matrix); // optional for debugging
+      drawBox(box); //optional for seeing what the system sees
+      document.getElementById("output").innerHTML = `Aspect Ratio: ${OBJECT_PROP.toFixed(2)}<br />Center: ${boxProp.centerX},${boxProp.centerY}`;
+    }
+
+    function isHeadingTowardAPointForUs(y1, y2) {
+      return y2 > y1 ? true : false
+    }
+    
+    function getYCoordOfNextContactRow(y2, wereMakingAShotOnGoal) {
+      const factor = wereMakingAShotOnGoal ? -1 : 1;
+      let min = MAX_Y;
+
+      for(let pr in [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3]) {
+        diff = (factor * (pr - y2));
+        if ((diff > 0) && (diff <= min)) {
+          min = diff;
+        }
+      }
+      return min + y2;
+    }
+    
+    function yIntercept(slope, x, y) {
+        return -1 * (slope * x + y);
+    }
+    
+    function slope(x1,x2, y1,y2) {
+      return (y2 - y1) / (x2 - x1);
+    }
+    
+    function yAtX(slope, x, yIntercept) {
+      return slope * x + yIntercept;
+    }
+
+    function getPointOnNewLine(unknownY, knownY, wereMakingAShotOnGoal) {
+      const yInterceptVal = Math.abs(knownY);
+      const yValAtMaxX = Math.abs(unknownY);
+      const factor = wereMakingAShotOnGoal ? -1 : 1;
+
+      const y = knownY + factor * (yInterceptVal + yValAtMaxX);
+
+      return [MAX_X, y];
+    }
+
+    function calculateMove(lastPos, secondLastPos) {
+      const x2 = lastPos[0];
+      const y2 = lastPos[1];
+      const x1 = secondLastPos[0];
+      const y1 = secondLastPos[1];
+      const wereMakingAShotOnGoal = isHeadingTowardAPointForUs(y1, y2);
+      var slopeVal  = slope(x1,x2, y1, y2);
+      var yInterceptVal = yIntercept(slopeVal, x1, y1)
+      var yValAtMaxX = yAtX(slopeVal, MAX_X, yInterceptVal);
+      const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
+      
+      var xCoord = null;
+      xCoord = (contactRowY + yInterceptVal) / slopeVal;
+      while ((xCoord < 0) || (xCoord > MAX_X)) {
+        if (xCoord < 0) { // bouncing off wall at yIntercept
+          var [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
+          let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
+          let newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
+          let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
+          xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+
+          // redefine...
+          slopeVal = newSlopeVal;
+          yInterceptVal = newYInterceptVal;
+          yValAtMaxX = newYValAtMaxX;
+        }
+
+        if (xCoord > MAX_X) {
+          var [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal);
+          let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
+          let newYValAtMaxX = yValAtMaxX;
+          let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
+          xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+
+          // redefine...
+          slopeVal = newSlopeVal;
+          yInterceptVal = newYInterceptVal;
+          yValAtMaxX = newYValAtMaxX;
+        }
+      }
+
+      if (xCoord != null) {
+        // move all rows of players to or away from this Xposition
+        // second argument meaning:
+        // -1: move away from the ball
+        // 1: move to the ball
+        MOVE_TO_HISTORY.push([xCoord, wereMakingAShotOnGoal ? -1 : 1]);
+      }
+
+      return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
+    }
+
+    function getBoxProperties(box) {
+      var prop = {
+        length      : 0,
+        width       : 0,
+        aspectRatio : 0,
+        centerX     : 0,
+        centerY     : 0
+      };
+      var deltaX = box.xMax - box.xMin + 1;
+      var deltaY = box.yMax - box.yMin + 1;
+
+      prop.length = Math.max(deltaX, deltaY);
+      prop.width = Math.min(deltaX, deltaY);
+      prop.aspectRatio = prop.width / prop.length;
+      prop.centerX = box.xMin + (0.5 * deltaX); // sub 1?
+      prop.centerY = box.yMin + (0.5 * deltaY); // sub 1?
+
+      return prop;
+    }
+
+    function drawBox(box) {
+      var context = CANVAS.getContext('2d');
+      context.beginPath();
+      var deltaX = box.xMax - box.xMin;
+      var deltaY = box.yMax - box.yMin;
+      context.rect(box.xMin, box.yMin, deltaX, deltaY);
+      context.stroke();
+    }
+
+    function getBoundingBox(matrix) {
+      var bbox = {
+        xMin: MAX_X + 1,
+        xMax: 0,
+        yMin: MAX_Y + 1,
+        yMax: 0
+      };
+      for (let y = 1; y <= MAX_Y; y++) {
+        for (let x = 1; x <= MAX_X; x++) {
+          if (matrix[y][x] == 0) {
+            bbox.yMin = Math.min(y, bbox.yMin);
+            bbox.yMax = Math.min(y, bbox.yMax);
+            bbox.xMin = Math.min(x, bbox.xMin);
+            bbox.xMax = Math.min(x, bbox.xMax);
+          }
+        }
+      }
+      return bbox;
+    }
+
+    function isolateObject(matrix) {
+      for (let i = 1; i <= MAX_Y; i++) {
+        for (let j = 1; j <= MAX_X; j++) {
+          if (matrix[i][j] < THRESHOLD) {
+            matrix[i][j] = 0;
+          } else {
+            matrix[i][j] = 255;
+          }
+        }
+      }
+    }
+
+    // opt debug method
+    function updateCanvas(matrix) {
+     var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
+     var image   = context.getImageData(0, 0, MAX_X, MAX_Y);
+      for (let i = 1; i <= MAX_Y; i++) {
+        for (let j = 1; j <= MAX_X; j++) {
+          var groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
+          image.data[groupIndex + 0] = matrix[i][j];
+          image.data[groupIndex + 1] = matrix[i][j];
+          image.data[groupIndex + 2] = matrix[i][j];
+        } // end-for
+      } // end-for
+      context.putImageData(image, 0, 0);
+    }
+
+    function getPixelMatrix(dataArray) {
+      var matrix = [];
+      for (let i = 1; i <= MAX_Y; i++) {
+        matrix[i] = [];
+        for (let j = 1; j <= MAX_X; j++) {
+          var groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
+          //ignore the 4th "alpha" (aka: transparency) value
+          var red        = dataArray[groupIndex + 0];
+          var green      = dataArray[groupIndex + 1];
+          var blue       = dataArray[groupIndex + 2];
+          matrix[i][j]   = (red + green + blue) / 3;
+        }
+      }
+      return matrix;
+    }
+
+  </script>
+</head>
+<body onload="main()">
+  <center>
+    <canvas id="camera"></canvas>
+    <div id="output"> ? </div>
+    <br />
+    <input id="objectName" type="text" placeholder="what is this?" />
+    <button class="button"> Learn </button>
+  </center>
+</body>
+</html>
