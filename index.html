@@ -23,6 +23,7 @@
     
     function main() {
       CANVAS = document.getElementById('camera');
+      updateThreshold(THRESHOLD);
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
       var constraints = { video: true };
@@ -43,9 +44,9 @@
 
     function updateThreshold() {
       thresholdControl = document.getElementById('thresholdCtrl');
-      console.log(`thresholdControl.value: ${thresholdControl.value}; THRESHOLD: ${THRESHOLD}`);
+      // console.log(`thresholdControl.value: ${thresholdControl.value}; THRESHOLD: ${THRESHOLD}`);
       THRESHOLD=thresholdControl.value;
-      console.log(`new THRESHOLD: ${THRESHOLD}`);
+      // console.log(`new THRESHOLD: ${THRESHOLD}`);
       return true;
     }
     
