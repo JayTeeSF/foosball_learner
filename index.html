@@ -271,7 +271,7 @@
           yValAtMaxX = newYValAtMaxX;
         }
         bounceCount += 1;
-        break if bounceCount >= 7;
+        if (bounceCount >= 7) { break; }
       }
       console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
 
