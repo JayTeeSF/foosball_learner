@@ -247,9 +247,9 @@
         for (let x = 1; x <= MAX_X; x++) {
           if (matrix[y][x] == 0) {
             bbox.yMin = Math.min(y, bbox.yMin);
-            bbox.yMax = Math.min(y, bbox.yMax);
+            bbox.yMax = Math.max(y, bbox.yMax);
             bbox.xMin = Math.min(x, bbox.xMin);
-            bbox.xMax = Math.min(x, bbox.xMax);
+            bbox.xMax = Math.max(x, bbox.xMax);
           }
         }
       }
