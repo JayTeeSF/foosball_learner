@@ -17,6 +17,7 @@
     const CONTEXT_ATTRS = { willReadFrequently: true };
     const COORD_HISTORY = [];
     const MOVE_TO_HISTORY = [];
+    const timeForMotorMove = 1 //sec => still need to figure it out
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
     var OBJECT_PROP = null;
@@ -212,7 +213,22 @@
 
       return [MAX_X, y];
     }
-
+    
+    function shouldIHitTheBall(x1, x2, y1, y2, closestRow, timeBetweenGettingData, timeForMotorMove) {
+  var speed = (abs(y2 - y1)) / (timeBetweenGettingData / 1000);
+  var distance = abs(closestRow - y2);
+  var timeUntilImpact = distance / speed;
+  var m = -0.5 / timeForMotorMove;
+  var shouldIHit = m * timeUntilImpact + 1;
+  if (shouldIHit >= 0.5) {
+    console.log("You should hit");
+    return true
+  } else {
+    console.log("Too far to hit")
+    return false
+  }
+}
+    
     function calculateMove(lastPos, secondLastPos) {
       const x2 = lastPos[0];
       const y2 = lastPos[1];
@@ -259,6 +275,9 @@
         // second argument meaning:
         // -1: move away from the ball
         // 1: move to the ball
+        if (wereMakingAShotOnGoal > 0) {  
+          shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
+        }
         let moveInfo = [xCoord, wereMakingAShotOnGoal];
         MOVE_TO_HISTORY.push(moveInfo);
         // console.log(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
