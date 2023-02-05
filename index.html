@@ -230,7 +230,7 @@
   }
 }
     
-    function calculateMove(lastPos, secondLastPos) {
+    function calculateMove(lastPos, secondLastPos, showBounceCount=false) {
       const x2 = lastPos[0];
       const y2 = lastPos[1];
       const x1 = secondLastPos[0];
@@ -243,8 +243,8 @@
       
       let xCoord = null;
       xCoord = (contactRowY + yInterceptVal) / slopeVal;
-      bounceCount = 0;
-      while ((xCoord < 0) || (xCoord > MAX_X)) {
+      var bounceCount = 0;
+      while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
           let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
           let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
@@ -271,9 +271,10 @@
           yValAtMaxX = newYValAtMaxX;
         }
         bounceCount += 1;
-        if (bounceCount >= 7) { break; }
       }
-      console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
+      if (showBounceCount) {
+        console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
+      }
 
       if (xCoord != null) {
         // move all rows of players to or away from this Xposition
