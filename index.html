@@ -20,6 +20,7 @@
     var CONTEXT_ATTRS = { willReadFrequently: true };
     var COORD_HISTORY = [];
     var MOVE_TO_HISTORY = [];
+    var SAVE_IMAGE = false;
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
     
@@ -82,6 +83,11 @@
       return true;
     }
     
+    function handleSaveImage() {
+      SAVE_IMAGE = true;
+      return false;
+    }
+    
     function updateImage(video) {
       var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
       //context.drawImage(video, 0, 0, SIZE, SIZE);
@@ -93,6 +99,13 @@
 
       var image = context.getImageData(0, 0, MAX_X, MAX_Y);
       var matrix = getPixelMatrix(image.data);
+      if (SAVE_IMAGE) {
+        SAVE_IMAGE = false;
+        console.log("\n\n\n***** SAVING IMAGE... *****\n");
+        console.log(matrix);
+        window.open(CANVAS.toDataURL('image/png'));
+        console.log("\n***** SAVED IMAGE. *****\n\n\n");
+      }
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
 
@@ -308,6 +321,7 @@
     <br />
     <input id="objectName" type="text" placeholder="what is this?" />
     <input id="thresholdCtrl" type="number" min="0" max="255" onclick="updateThreshold();" />
+    <button id="saveImage" onclick="handleSaveImage();">Save Image</button>
     <button class="button"> Learn </button>
   </center>
 </body>
