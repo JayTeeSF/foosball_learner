@@ -104,17 +104,13 @@
       var matrix = getPixelMatrix(image.data);
       if (SAVE_IMAGE) {
         SAVE_IMAGE = false;
-        console.log("\n\n\n***** SAVING IMAGE... *****\n\n");
-        console.log(`${JSON.stringify(matrix)}`);
-        console.log("\n\n***** SAVED IMAGE. *****\n\n\n");
-
         const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
         grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
         updateACanvas(matrix, grayScaleCanvas); // optional for debugging
         const dataURL = grayScaleCanvas.toDataURL("image/png");
         // window.open(dataURL);
         const newTab = window.open('about:blank','image from canvas');
-        newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrix)}</div>");
       }
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
