@@ -215,8 +215,8 @@
     }
     
     function shouldIHitTheBall(x1, x2, y1, y2, closestRow, timeBetweenGettingData, timeForMotorMove) {
-  var speed = (abs(y2 - y1)) / (timeBetweenGettingData / 1000);
-  var distance = abs(closestRow - y2);
+  var speed = (Math.abs(y2 - y1)) / (timeBetweenGettingData / 1000);
+  var distance = Math.abs(closestRow - y2);
   var timeUntilImpact = distance / speed;
   var m = -0.5 / timeForMotorMove;
   var shouldIHit = m * timeUntilImpact + 1;
