@@ -43,11 +43,32 @@
         }
       ).catch(
         function(err) {
-          if (constraints != DEFAULT_CONSTRAINTS) {
-            console.log(`Unable to detect rear camera: ${constraints}. Get video using default constraints...`);
+          if ((err.name === 'ConstraintNotSatisfiedError') && (constraints != DEFAULT_CONSTRAINTS)) {
+            console.error(`Unable to detect desired camera: ${constraints}. Enumerating available devices...`);
+            if (!navigator.mediaDevices?.enumerateDevices) {
+              console.log("enumerateDevices() not supported.");
+            } else {
+            // List cameras and microphones.
+            navigator.mediaDevices.enumerateDevices()
+              .then((devices) => {
+                devices.forEach((device) => {
+                  console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+                });
+              })
+              .catch((err) => {
+                console.error(`${err.name}: ${err.message}`);
+              });
+            }
+            console.log(`Trying to get video using default camera...`);
             getVideo(); // try again with DEFAULT_CONSTRAINTS
+          } else if (err.name === 'PermissionDeniedError') {
+            console.error(
+              'Permissions have not been granted to use your camera and ' +
+              'microphone, you need to allow the page access to your devices in ' +
+              `order for the demo to work: ${err.name}`, err
+             );
           } else {
-            alert(`camera error: ${err}`);
+            alert(`Unable to access the camera; error: ${err.name} - ${err}`);
           }
         }
       );
