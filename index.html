@@ -20,14 +20,20 @@
     var CONTEXT_ATTRS = { willReadFrequently: true };
     var COORD_HISTORY = [];
     var MOVE_TO_HISTORY = [];
+    const DEFAULT_CONSTRAINTS = {video: true};
+    const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
     
     function main() {
       CANVAS = document.getElementById('camera');
       document.getElementById('thresholdCtrl').value = THRESHOLD;
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
-      var constraints = { video: true };
-      var permission = navigator.mediaDevices.getUserMedia(constraints);
+      var constraints = { video: {facingMode: 'environment'} };
+      getVideo(REAR_CAMERA_CONSTRAINTS);
+    }
+    
+    function getVideo(constraints=DEFAULT_CONSTRAINTS) {
+      let permission = navigator.mediaDevices.getUserMedia(constraints);
       permission.then(
         function(stream) {
           var video = document.createElement('video');
@@ -37,11 +43,16 @@
         }
       ).catch(
         function(err) {
-          alert("camera error");
+          if (constraints != DEFAULT_CONSTRAINTS) {
+            console.log(`Unable to detect rear camera: ${constraints}. Get video using default constraints...`);
+            getVideo(); // try again with DEFAULT_CONSTRAINTS
+          } else {
+            alert(`camera error: ${err}`);
+          }
         }
       );
     }
-
+    
     function updateThreshold() {
       thresholdControl = document.getElementById('thresholdCtrl');
       // console.log(`thresholdControl.value: ${thresholdControl.value}; THRESHOLD: ${THRESHOLD}`);
