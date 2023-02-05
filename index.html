@@ -101,11 +101,13 @@
       var matrix = getPixelMatrix(image.data);
       if (SAVE_IMAGE) {
         SAVE_IMAGE = false;
-        console.log("\n\n\n***** SAVING IMAGE... *****\n");
-        console.log(`${matrix}`);
-        console.log("\n***** SAVED IMAGE. *****\n\n\n");
+        console.log("\n\n\n***** SAVING IMAGE... *****\n\n");
+        console.log(`${JSON.stringify(matrix)}`);
+        console.log("\n\n***** SAVED IMAGE. *****\n\n\n");
 
-        const dataURL = CANVAS.toDataURL("image/png");
+        const grayScaleCanvas = document.createElement('grayScaleCanvas'); // not added to dom !?
+        updateACanvas(matrix, grayScaleCanvas); // optional for debugging
+        const dataURL = grayScaleCanvas.toDataURL("image/png");
         // window.open(dataURL);
         const newTab = window.open('about:blank','image from canvas');
         newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
@@ -128,7 +130,7 @@
         console.log("Need more coordinates...");
       }
 
-      updateCanvas(matrix); // optional for debugging
+      updateACanvas(matrix, CANVAS); // optional for debugging
       drawBox(box); //optional for seeing what the system sees
       document.getElementById("output").innerHTML = `Aspect Ratio: ${OBJECT_PROP.toFixed(2)}<br />Center: ${boxProp.centerX},${boxProp.centerY}`;
     }
@@ -286,8 +288,8 @@
     }
 
     // opt debug method
-    function updateCanvas(matrix) {
-     var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
+    function updateACanvas(matrix, canvas=CANVAS) {
+     var context = canvas.getContext('2d', CONTEXT_ATTRS)
      var image   = context.getImageData(0, 0, MAX_X, MAX_Y);
       for (let i = 1; i <= MAX_Y; i++) {
         for (let j = 1; j <= MAX_X; j++) {
