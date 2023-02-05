@@ -16,6 +16,7 @@
     var PLAYER_ROW_2 = 3 * MAX_Y / 7;
     var PLAYER_ROW_3 = 5 * MAX_Y / 7;
     var CANVAS = null;
+    var WRAPPER = null;
     var INTERVAL = 42; //ms
     var CONTEXT_ATTRS = { willReadFrequently: true };
     var COORD_HISTORY = [];
@@ -26,10 +27,11 @@
     
     function main() {
       CANVAS = document.getElementById('camera');
-      document.getElementById('thresholdCtrl').value = THRESHOLD;
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
-      var constraints = { video: {facingMode: 'environment'} };
+      document.getElementById('thresholdCtrl').value = THRESHOLD;
+      WRAPPER = document.getElementById('wrapper');
+      WRAPPER.style.display = "none";
       getVideo(REAR_CAMERA_CONSTRAINTS);
     }
     
@@ -103,15 +105,17 @@
       var image = context.getImageData(0, 0, MAX_X, MAX_Y);
       var matrix = getPixelMatrix(image.data);
       var matrixClone = [...matrix]
-      if (SAVE_IMAGE && sumOf(matrixClone) > 0) {
+      if ((SAVE_IMAGE) && (sumOfMatrix(matrixClone) > 0)) {
         SAVE_IMAGE = false;
         // const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
         // grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
-        const wrapper = document.getElementById('wrapper');
         const grayScaleCanvas = document.getElementById('grayScaleCanvas');
+        // is the context & pre-drawImage necessary?
+        var gsContext = grayScaleCanvas.getContext('2d', CONTEXT_ATTRS)
+        gsContext.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
+        // ???
         updateACanvas(matrixClone, grayScaleCanvas); // optional for debugging
         const dataURL = grayScaleCanvas.toDataURL("image/png");
-        //wrapper.style.display = "none";
         // window.open(dataURL);
         const newTab = window.open('about:blank','image from canvas');
         // newTab.document.write(`<div>${JSON.stringify(matrixClone)}</div>`);
@@ -123,7 +127,7 @@
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
 
-    function sumOf(matrix) {
+    function sumOfMatrix(matrix) {
       let total = 0;
       for (let y = 1; y <= MAX_Y; y++) {
         for (let x = 1; x <= MAX_X; x++) {
@@ -347,7 +351,8 @@
     <input id="thresholdCtrl" type="number" min="0" max="255" onclick="updateThreshold();" />
     <button id="saveImage" onclick="handleSaveImage();">Save Image</button>
     <button class="button"> Learn </button>
-    <div id="wrapper" style="display:none">
+    <br />
+    <div id="wrapper">
       <canvas id="grayScaleCanvas"></canvas>
     </div>
   </center>
