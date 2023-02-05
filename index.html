@@ -102,17 +102,35 @@
 
       var image = context.getImageData(0, 0, MAX_X, MAX_Y);
       var matrix = getPixelMatrix(image.data);
-      if (SAVE_IMAGE) {
+      var matrixClone = [...matrix]
+      if (SAVE_IMAGE && sumOf(matrixClone) > 0) {
         SAVE_IMAGE = false;
-        const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
-        grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
-        updateACanvas(matrix, grayScaleCanvas); // optional for debugging
+        // const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
+        // grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
+        const wrapper = document.getElementById('wrapper');
+        const grayScaleCanvas = document.getElementById('grayScaleCanvas');
+        updateACanvas(matrixClone, grayScaleCanvas); // optional for debugging
         const dataURL = grayScaleCanvas.toDataURL("image/png");
+        //wrapper.style.display = "none";
         // window.open(dataURL);
         const newTab = window.open('about:blank','image from canvas');
-        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrix)}</div>`);
+        // newTab.document.write(`<div>${JSON.stringify(matrixClone)}</div>`);
+        //newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrixClone)}</div>`);
+        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/>`);
+        newTab.document.write('<br />');
+        newTab.document.write(`<div>${JSON.stringify(matrixClone)}</div>`);
       }
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
+    }
+
+    function sumOf(matrix) {
+      let total = 0;
+      for (let y = 1; y <= MAX_Y; y++) {
+        for (let x = 1; x <= MAX_X; x++) {
+          total += matrix[y][x];
+        }
+      }
+      return total;
     }
 
     function processMatrix(matrix) {
@@ -329,6 +347,9 @@
     <input id="thresholdCtrl" type="number" min="0" max="255" onclick="updateThreshold();" />
     <button id="saveImage" onclick="handleSaveImage();">Save Image</button>
     <button class="button"> Learn </button>
+    <div id="wrapper" style="display:none">
+      <canvas id="grayScaleCanvas"></canvas>
+    </div>
   </center>
 </body>
 </html>
