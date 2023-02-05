@@ -167,7 +167,7 @@
         updateACanvas(matrix, grayScaleCanvas); // optional for debugging
         const dataURL = grayScaleCanvas.toDataURL("image/png");
 
-        const newTab = window.open('about:blank','image from canvas');
+        var newTab = window.open('about:blank','image from canvas');
         newTab.document.write(`<img src='${dataURL}' alt='from canvas'/>`);
         newTab.document.write('<br />');
         newTab.document.write(`<div><span>gray-scale image:</span><br />${JSON.stringify(matrix)}</div>`);
