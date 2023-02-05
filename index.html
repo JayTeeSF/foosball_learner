@@ -275,7 +275,7 @@
         // second argument meaning:
         // -1: move away from the ball
         // 1: move to the ball
-        if (wereMakingAShotOnGoal > 0) {  
+        if (wereMakingAShotOnGoal) {
           shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
         }
         let moveInfo = [xCoord, wereMakingAShotOnGoal];
