@@ -110,7 +110,7 @@
         const dataURL = grayScaleCanvas.toDataURL("image/png");
         // window.open(dataURL);
         const newTab = window.open('about:blank','image from canvas');
-        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrix)}</div>");
+        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrix)}</div>`);
       }
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
