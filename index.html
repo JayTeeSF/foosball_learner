@@ -108,7 +108,8 @@
         console.log(`${JSON.stringify(matrix)}`);
         console.log("\n\n***** SAVED IMAGE. *****\n\n\n");
 
-        const grayScaleCanvas = document.createElement('grayScaleCanvas'); // not added to dom !?
+        const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
+        grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
         updateACanvas(matrix, grayScaleCanvas); // optional for debugging
         const dataURL = grayScaleCanvas.toDataURL("image/png");
         // window.open(dataURL);
