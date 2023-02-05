@@ -7,23 +7,24 @@
     }
   </style>
   <script>
-    var OBJECT_PROP = null;
-    var THRESHOLD = 40;
-    var SIZE = 300;
-    var MAX_X = SIZE;
-    var MAX_Y = SIZE;
-    var PLAYER_ROW_1 = MAX_Y / 7;
-    var PLAYER_ROW_2 = 3 * MAX_Y / 7;
-    var PLAYER_ROW_3 = 5 * MAX_Y / 7;
-    var CANVAS = null;
-    var WRAPPER = null;
-    var INTERVAL = 42; //ms
-    var CONTEXT_ATTRS = { willReadFrequently: true };
-    var COORD_HISTORY = [];
-    var MOVE_TO_HISTORY = [];
-    var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
+    const SIZE = 300;
+    const MAX_X = SIZE;
+    const MAX_Y = SIZE;
+    const PLAYER_ROW_1 = MAX_Y / 7;
+    const PLAYER_ROW_2 = 3 * MAX_Y / 7;
+    const PLAYER_ROW_3 = 5 * MAX_Y / 7;
+    const INTERVAL = 42; //ms => 23 frames/sec
+    const CONTEXT_ATTRS = { willReadFrequently: true };
+    const COORD_HISTORY = [];
+    const MOVE_TO_HISTORY = [];
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
+    var OBJECT_PROP = null;
+    var UPDATE_IMAGE_COUNTER = 0;
+    var THRESHOLD = 40;
+    var CANVAS = null;
+    var WRAPPER = null;
+    var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
     
     function main() {
       CANVAS = document.getElementById('camera');
@@ -39,7 +40,7 @@
       let permission = navigator.mediaDevices.getUserMedia(constraints);
       permission.then(
         function(stream) {
-          var video = document.createElement('video');
+          let video = document.createElement('video');
           video.srcObject = stream;
           console.log("About to play video...");
           video.play();
@@ -81,9 +82,7 @@
     
     function updateThreshold() {
       thresholdControl = document.getElementById('thresholdCtrl');
-      // console.log(`thresholdControl.value: ${thresholdControl.value}; THRESHOLD: ${THRESHOLD}`);
       THRESHOLD=thresholdControl.value;
-      // console.log(`new THRESHOLD: ${THRESHOLD}`);
       return true;
     }
     
@@ -92,38 +91,25 @@
       return false;
     }
     
+    function showCounter() {
+      alert(`updateImage has run ${UPDATE_IMAGE_COUNTER} times`);
+    }
+
+    function incrementCounter() {
+      UPDATE_IMAGE_COUNTER = UPDATE_IMAGE_COUNTER + 1;
+    }
+
     function updateImage(video) {
-      console.log(".");
-      var context = CANVAS.getContext('2d', CONTEXT_ATTRS)
-      //context.drawImage(video, 0, 0, SIZE, SIZE);
-      //return
-      var minSize = Math.min(video.videoWidth, video.videoHeight);
-      var startX = (video.videoWidth - minSize) / 2;
-      var startY = (video.videoHeight - minSize) / 2;
+      incrementCounter();
+      let context = CANVAS.getContext('2d', CONTEXT_ATTRS)
+      let minSize = Math.min(video.videoWidth, video.videoHeight);
+      let startX = (video.videoWidth - minSize) / 2;
+      let startY = (video.videoHeight - minSize) / 2;
       context.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
 
-      var image = context.getImageData(0, 0, MAX_X, MAX_Y);
-      var matrix = getPixelMatrix(image.data);
-      var matrixClone = [...matrix]
-      if ((SAVE_IMAGE) && (sumOfMatrix(matrixClone) > 0)) {
-        SAVE_IMAGE = false;
-        // const grayScaleCanvas = document.createElement('canvas'); // not added to dom !?
-        // grayScaleCanvas.setAttribute("id", "grayScaleCanvas");
-        const grayScaleCanvas = document.getElementById('grayScaleCanvas');
-        // is the context & pre-drawImage necessary?
-        var gsContext = grayScaleCanvas.getContext('2d', CONTEXT_ATTRS)
-        gsContext.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
-        // ???
-        updateACanvas(matrixClone, grayScaleCanvas); // optional for debugging
-        const dataURL = grayScaleCanvas.toDataURL("image/png");
-        // window.open(dataURL);
-        const newTab = window.open('about:blank','image from canvas');
-        // newTab.document.write(`<div>${JSON.stringify(matrixClone)}</div>`);
-        //newTab.document.write(`<img src='${dataURL}' alt='from canvas'/><br /><div>${JSON.stringify(matrixClone)}</div>`);
-        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/>`);
-        newTab.document.write('<br />');
-        newTab.document.write(`<div>${JSON.stringify(matrixClone)}</div>`);
-      }
+      let image = context.getImageData(0, 0, MAX_X, MAX_Y);
+      let matrix = getPixelMatrix(image.data);
+      maybeSaveGrayScale(matrix, video, startX, startY, minSize, minSize);
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
 
@@ -139,22 +125,53 @@
 
     function processMatrix(matrix) {
       isolateObject(matrix);
-      var box = getBoundingBox(matrix);
-      var boxProp = getBoxProperties(box);
+      let box = getBoundingBox(matrix);
+      let boxProp = getBoxProperties(box);
       OBJECT_PROP = boxProp.aspectRatio;
       // once we have the properties we have the centerX & centerY of the ball (in theory)
-      COORD_HISTORY.push([OBJECT_PROP.centerX, OBJECT_PROP.centerY]);
+      let pos = [OBJECT_PROP.centerX, OBJECT_PROP.centerY];
+      COORD_HISTORY.push(pos);
+      // console.log(`Stored pos(${pos.join(",")}) in COORD_HISTORY.`);
+      let xCoord = -1;
+      let movement = "unknown";
+      let makingAShot = false;
       if (COORD_HISTORY.length > 1) {
         let lastPos = COORD_HISTORY.length - 1;
         let secondLastPos = COORD_HISTORY.length - 2;
-        calculateMove(lastPos, secondLastPos);
+        [xCoord, makingAShot] = calculateMove(lastPos, secondLastPos);
+        if (makingAShot) {
+          movement = "away from";
+        } else {
+          movement = "toward";
+        }
       } else {
         console.log("Need more coordinates...");
       }
 
       updateACanvas(matrix, CANVAS); // optional for debugging
       drawBox(box); //optional for seeing what the system sees
-      document.getElementById("output").innerHTML = `Aspect Ratio: ${OBJECT_PROP.toFixed(2)}<br />Center: ${boxProp.centerX},${boxProp.centerY}`;
+      document.getElementById("output").innerHTML = `Aspect Ratio: ${OBJECT_PROP.toFixed(2)}<br />Center: ${boxProp.centerX},${boxProp.centerY}, Move ${movement} ${xCoord} xCoord`;
+    }
+
+    // pass a clone of the matrix...
+    function maybeSaveGrayScale(matrix, video, startX, startY, minSize, minSize) {
+      if ((SAVE_IMAGE) && (sumOfMatrix(matrix) > 0)) {
+        SAVE_IMAGE = false;
+        const grayScaleCanvas = document.getElementById('grayScaleCanvas');
+        grayScaleCanvas.width = MAX_X;
+        grayScaleCanvas.height = MAX_Y;
+        // for some reason the context & pre-drawImage is necessary...
+        let gsContext = grayScaleCanvas.getContext('2d', CONTEXT_ATTRS)
+        gsContext.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
+
+        updateACanvas(matrix, grayScaleCanvas); // optional for debugging
+        const dataURL = grayScaleCanvas.toDataURL("image/png");
+
+        const newTab = window.open('about:blank','image from canvas');
+        newTab.document.write(`<img src='${dataURL}' alt='from canvas'/>`);
+        newTab.document.write('<br />');
+        newTab.document.write(`<div><span>gray-scale image:</span><br />${JSON.stringify(matrix)}</div>`);
+      }
     }
 
     function isHeadingTowardAPointForUs(y1, y2) {
@@ -202,16 +219,16 @@
       const x1 = secondLastPos[0];
       const y1 = secondLastPos[1];
       const wereMakingAShotOnGoal = isHeadingTowardAPointForUs(y1, y2);
-      var slopeVal  = slope(x1,x2, y1, y2);
-      var yInterceptVal = yIntercept(slopeVal, x1, y1)
-      var yValAtMaxX = yAtX(slopeVal, MAX_X, yInterceptVal);
+      let slopeVal  = slope(x1,x2, y1, y2);
+      let yInterceptVal = yIntercept(slopeVal, x1, y1)
+      let yValAtMaxX = yAtX(slopeVal, MAX_X, yInterceptVal);
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
       
-      var xCoord = null;
+      let xCoord = null;
       xCoord = (contactRowY + yInterceptVal) / slopeVal;
       while ((xCoord < 0) || (xCoord > MAX_X)) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
-          var [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
+          let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
           let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
           let newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
           let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
@@ -224,7 +241,7 @@
         }
 
         if (xCoord > MAX_X) {
-          var [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal);
+          let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal);
           let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
           let newYValAtMaxX = yValAtMaxX;
           let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
@@ -242,22 +259,24 @@
         // second argument meaning:
         // -1: move away from the ball
         // 1: move to the ball
-        MOVE_TO_HISTORY.push([xCoord, wereMakingAShotOnGoal ? -1 : 1]);
+        let moveInfo = [xCoord, wereMakingAShotOnGoal];
+        MOVE_TO_HISTORY.push(moveInfo);
+        // console.log(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
       }
 
       return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
     }
 
     function getBoxProperties(box) {
-      var prop = {
+      let prop = {
         length      : 0,
         width       : 0,
         aspectRatio : 0,
         centerX     : 0,
         centerY     : 0
       };
-      var deltaX = box.xMax - box.xMin + 1;
-      var deltaY = box.yMax - box.yMin + 1;
+      let deltaX = box.xMax - box.xMin + 1;
+      let deltaY = box.yMax - box.yMin + 1;
 
       prop.length = Math.max(deltaX, deltaY);
       prop.width = Math.min(deltaX, deltaY);
@@ -269,16 +288,16 @@
     }
 
     function drawBox(box) {
-      var context = CANVAS.getContext('2d');
+      let context = CANVAS.getContext('2d');
       context.beginPath();
-      var deltaX = box.xMax - box.xMin;
-      var deltaY = box.yMax - box.yMin;
+      let deltaX = box.xMax - box.xMin;
+      let deltaY = box.yMax - box.yMin;
       context.rect(box.xMin, box.yMin, deltaX, deltaY);
       context.stroke();
     }
 
     function getBoundingBox(matrix) {
-      var bbox = {
+      let bbox = {
         xMin: MAX_X + 1,
         xMax: 0,
         yMin: MAX_Y + 1,
@@ -311,11 +330,11 @@
 
     // opt debug method
     function updateACanvas(matrix, canvas=CANVAS) {
-     var context = canvas.getContext('2d', CONTEXT_ATTRS)
-     var image   = context.getImageData(0, 0, MAX_X, MAX_Y);
+     let context = canvas.getContext('2d', CONTEXT_ATTRS)
+     let image   = context.getImageData(0, 0, MAX_X, MAX_Y);
       for (let i = 1; i <= MAX_Y; i++) {
         for (let j = 1; j <= MAX_X; j++) {
-          var groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
+          let groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
           image.data[groupIndex + 0] = matrix[i][j];
           image.data[groupIndex + 1] = matrix[i][j];
           image.data[groupIndex + 2] = matrix[i][j];
@@ -325,15 +344,15 @@
     }
 
     function getPixelMatrix(dataArray) {
-      var matrix = [];
+      let matrix = [];
       for (let i = 1; i <= MAX_Y; i++) {
         matrix[i] = [];
         for (let j = 1; j <= MAX_X; j++) {
-          var groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
+          let groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
           //ignore the 4th "alpha" (aka: transparency) value
-          var red        = dataArray[groupIndex + 0];
-          var green      = dataArray[groupIndex + 1];
-          var blue       = dataArray[groupIndex + 2];
+          let red        = dataArray[groupIndex + 0];
+          let green      = dataArray[groupIndex + 1];
+          let blue       = dataArray[groupIndex + 2];
           matrix[i][j]   = (red + green + blue) / 3;
         }
       }
@@ -350,6 +369,7 @@
     <input id="objectName" type="text" placeholder="what is this?" />
     <input id="thresholdCtrl" type="number" min="0" max="255" onclick="updateThreshold();" />
     <button id="saveImage" onclick="handleSaveImage();">Save Image</button>
+    <button id="showCounter" onclick="showCounter();">showCounter</button>
     <button class="button"> Learn </button>
     <br />
     <div id="wrapper">
