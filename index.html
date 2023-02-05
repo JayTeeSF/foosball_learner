@@ -102,9 +102,13 @@
       if (SAVE_IMAGE) {
         SAVE_IMAGE = false;
         console.log("\n\n\n***** SAVING IMAGE... *****\n");
-        console.log(matrix);
-        window.open(CANVAS.toDataURL('image/png'));
+        console.log(`${matrix}`);
         console.log("\n***** SAVED IMAGE. *****\n\n\n");
+
+        const dataURL = CANVAS.toDataURL("image/png");
+        // window.open(dataURL);
+        const newTab = window.open('about:blank','image from canvas');
+        newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
       }
       processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
     }
