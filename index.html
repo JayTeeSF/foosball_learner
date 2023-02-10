@@ -248,7 +248,7 @@
       console.log("contact row", contactRowY);
       
       let xCoord = null;
-      xCoord = (contactRowY + yInterceptVal) / slopeVal;
+      xCoord = (contactRowY - yInterceptVal) / slopeVal;
       console.log("x coordinate:", xCoord);
       var bounceCount = 0;
       console.log("bounce count:", bounceCount);
