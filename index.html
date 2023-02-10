@@ -205,14 +205,14 @@
       return slope * x + yIntercept;
     }
 
-    function getPointOnNewLine(unknownY, knownY, wereMakingAShotOnGoal) {
+    function getPointOnNewLine(unknownY, knownY, wereMakingAShotOnGoal, whichNum) {
       const yInterceptVal = Math.abs(knownY);
       const yValAtMaxX = Math.abs(unknownY);
       const factor = wereMakingAShotOnGoal ? -1 : 1;
 
       const y = knownY + factor * (yInterceptVal + yValAtMaxX);
 
-      return [MAX_X, y];
+      return [whichNum, y];
     }
     
     function shouldIHitTheBall(x1, x2, y1, y2, closestRow, timeBetweenGettingData, timeForMotorMove) {
@@ -255,7 +255,7 @@
       while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
           console.log("bouncing off left side");
-          let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
+          let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal, MAX_X);
           console.log("new x:", newX2, "new y:", newY2);
           let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
           console.log("new slope:", newSlopeVal);
@@ -263,7 +263,7 @@
           console.log("new y intercept:", newYInterceptVal);
           let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
           console.log("new max intercept:", newYValAtMaxX);
-          xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+          xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
           console.log(" new x coord:", xCoord);
 
           // redefine...
@@ -276,15 +276,16 @@
 
         if (xCoord > MAX_X) {
           console.log("bouncing off right side");
-          let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal);
+          let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
           console.log("new x:", newX2, "new y:", newY2);
           let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
           console.log("new slope:", newSlopeVal);
           let newYValAtMaxX = yValAtMaxX;
           console.log("new max intercept:", newYValAtMaxX);
-          let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
+          //let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
+          let newInterceptVal = newY2;
           console.log("new y intercept:", newYInterceptVal);
-          xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+          xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
           console.log(" new x coord:", xCoord);
 
           // redefine...
