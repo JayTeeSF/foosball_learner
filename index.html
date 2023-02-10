@@ -139,7 +139,7 @@
       if (COORD_HISTORY.length > 1) {
         let lastPos = COORD_HISTORY.length - 1;
         let secondLastPos = COORD_HISTORY.length - 2;
-        [xCoord, makingAShot] = calculateMove(lastPos, secondLastPos);
+        [xCoord, makingAShot] =  [55, true];// calculateMove(lastPos, secondLastPos); //uncomment this later
         if (makingAShot) {
           movement = "away from";
         } else {
@@ -368,6 +368,19 @@
       context.putImageData(image, 0, 0);
     }
 
+    function calculateWhereToMove() {
+      let currentX = document.getElementById('currentX').value;
+      let currentY = document.getElementById('currentY').value;
+      let previousX = document.getElementById('previousX').value;
+      let previousY = document.getElementById('previousY').value;
+      console.log(JSON.stringify(currentX));
+      var last = [parseInt(currentX), parseInt(currentY)];
+      console.log("last: " + JSON.stringify(last));
+      var secondLast = [parseInt(previousX), parseInt(previousY)];
+      console.log("secondLast: " + JSON.stringify(secondLast));
+      alert(calculateMove(last, secondLast));
+    }   
+    
     function getPixelMatrix(dataArray) {
       let matrix = [];
       for (let i = 1; i <= MAX_Y; i++) {
@@ -396,6 +409,12 @@
     <button id="saveImage" onclick="handleSaveImage();">Save Image</button>
     <button id="showCounter" onclick="showCounter();">showCounter</button>
     <button class="button"> Learn </button>
+    <br />
+    <input id="currentX" type="number" min="0" max="300" placeholder="current X coord" />
+    <input id="currentY" type="number" min="0" max="300" placeholder="current Y coord" />
+    <input id="previousX" type="number" min="0" max="300" placeholder="prev X coord" />
+    <input id="previousY" type="number" min="0" max="300" placeholder="prev Y coord" />
+    <button id="calculateMove" onclick="calculateWhereToMove();">Calculate Move</button>
     <br />
     <div id="wrapper">
       <canvas id="grayScaleCanvas"></canvas>
