@@ -235,42 +235,65 @@
       const y2 = lastPos[1];
       const x1 = secondLastPos[0];
       const y1 = secondLastPos[1];
+      console.log("x1: ", x1, "x2: ", x2, "y1: ", y1, "y2: ", y2);
       const wereMakingAShotOnGoal = isHeadingTowardAPointForUs(y1, y2);
+      console.log("Do we shoot", wereMakingAShotOnGoal);
       let slopeVal  = slope(x1,x2, y1, y2);
-      let yInterceptVal = yIntercept(slopeVal, x1, y1)
+      console.log("slope:", slopeVal);
+      let yInterceptVal = yIntercept(slopeVal, x1, y1);
+      console.log("y intercept:", yInterceptVal);
       let yValAtMaxX = yAtX(slopeVal, MAX_X, yInterceptVal);
+      console.log("max intercept:", yValAtMaxX);
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
+      console.log("contact row", contactRowY);
       
       let xCoord = null;
       xCoord = (contactRowY + yInterceptVal) / slopeVal;
+      console.log("x coordinate:", xCoord);
       var bounceCount = 0;
+      console.log("bounce count:", bounceCount);
       while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
+          console.log("bouncing off left side");
           let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal);
+          console.log("new x:", newX2, "new y:", newY2);
           let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
+          console.log("new slope:", newSlopeVal);
           let newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
+          console.log("new y intercept:", newYInterceptVal);
           let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
+          console.log("new max intercept:", newYValAtMaxX);
           xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+          console.log(" new x coord:", xCoord);
 
           // redefine...
           slopeVal = newSlopeVal;
           yInterceptVal = newYInterceptVal;
           yValAtMaxX = newYValAtMaxX;
+          bounceCount += 1;
+          console.log("bounce count:", bounceCount);
         }
 
         if (xCoord > MAX_X) {
+          console.log("bouncing off right side");
           let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal);
+          console.log("new x:", newX2, "new y:", newY2);
           let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
+          console.log("new slope:", newSlopeVal);
           let newYValAtMaxX = yValAtMaxX;
+          console.log("new max intercept:", newYValAtMaxX);
           let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
+          console.log("new y intercept:", newYInterceptVal);
           xCoord = (contactRowY + newYInterceptVal) / newSlopeVal;
+          console.log(" new x coord:", xCoord);
 
           // redefine...
           slopeVal = newSlopeVal;
           yInterceptVal = newYInterceptVal;
           yValAtMaxX = newYValAtMaxX;
+          bounceCount += 1;
+          console.log("bounce count:", bounceCount);
         }
-        bounceCount += 1;
       }
       if (showBounceCount) {
         console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
@@ -282,11 +305,15 @@
         // -1: move away from the ball
         // 1: move to the ball
         if (wereMakingAShotOnGoal) {
-          shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
+          //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
+          console.log("we're making a shot on goal");
         }
         let moveInfo = [xCoord, wereMakingAShotOnGoal];
+        console.log("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
         // console.log(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
+      } else {
+          console.log("x coord = null");
       }
 
       return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
