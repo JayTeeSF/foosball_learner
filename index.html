@@ -7,6 +7,7 @@
     }
   </style>
   <script>
+    const DEBUG = true; // adjust this to silence the console.log statements
     const SIZE = 300;
     const MAX_X = SIZE;
     const MAX_Y = SIZE;
@@ -53,7 +54,7 @@
           if ((err.name === 'ConstraintNotSatisfiedError') && (constraints != DEFAULT_CONSTRAINTS)) {
             console.error(`Unable to detect desired camera: ${constraints}. Enumerating available devices...`);
             if (!navigator.mediaDevices?.enumerateDevices) {
-              console.log("enumerateDevices() not supported.");
+              console.warn("enumerateDevices() not supported.");
             } else {
             // List cameras and microphones.
             navigator.mediaDevices.enumerateDevices()
@@ -132,7 +133,7 @@
       // once we have the properties we have the centerX & centerY of the ball (in theory)
       let pos = [OBJECT_PROP.centerX, OBJECT_PROP.centerY];
       COORD_HISTORY.push(pos);
-      // console.log(`Stored pos(${pos.join(",")}) in COORD_HISTORY.`);
+      // debug(`Stored pos(${pos.join(",")}) in COORD_HISTORY.`);
       let xCoord = -1;
       let movement = "unknown";
       let makingAShot = false;
@@ -146,7 +147,7 @@
           movement = "toward";
         }
       } else {
-        console.log("Need more coordinates...");
+        console.warn("Need more coordinates...");
       }
 
       updateACanvas(matrix, CANVAS); // optional for debugging
@@ -180,17 +181,24 @@
       // return y2 > y1 ? false : true
     }
     
+    // y2 tells us where the ball is
+    // wereMakingAShotOnGoal tells us the direction the ball is moving
+    // ...so we know which playerRow we care about
     function getYCoordOfNextContactRow(y2, wereMakingAShotOnGoal) {
       let min = MAX_Y;
 
       winning_pr = null;
+      const factor = wereMakingAShotOnGoal ? 1 : -1;
       prs = [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3];
       for(let i = 0; i < prs.length; i++) {
         let pr = prs[i];
-        diff = Math.abs(y2 - pr);
+        // TBD: change `diff` to support standard-screen pixel-coords vs. quadrant-I
+        diff = (factor * (y2 - pr));
+
+        // don't chose a player row that is "behind" the ball ...even if it's closer!
         if ((diff > 0) && (diff <= min)) {
           min = diff;
-          console.log(`winning_pr: ${pr}`);
+          debug(`winning_pr: ${pr}`);
           winning_pr = pr
         }
       }
@@ -226,10 +234,10 @@
   var m = -0.5 / timeForMotorMove;
   var shouldIHit = m * timeUntilImpact + 1;
   if (shouldIHit >= 0.5) {
-    console.log("You should hit");
+    debug("You should hit");
     return true
   } else {
-    console.log("Too far to hit")
+    debug("Too far to hit")
     return false
   }
 }
@@ -239,67 +247,67 @@
       const y2 = lastPos[1];
       const x1 = secondLastPos[0];
       const y1 = secondLastPos[1];
-      console.log("x1: ", x1, "x2: ", x2, "y1: ", y1, "y2: ", y2);
+      debug("x1: ", x1, "x2: ", x2, "y1: ", y1, "y2: ", y2);
       const wereMakingAShotOnGoal = isHeadingTowardAPointForUs(y1, y2);
-      console.log("Do we shoot", wereMakingAShotOnGoal);
+      debug("Do we shoot", wereMakingAShotOnGoal);
       let slopeVal  = slope(x1,x2, y1, y2);
-      console.log("slope:", slopeVal);
+      debug("slope:", slopeVal);
       let yInterceptVal = yIntercept(slopeVal, x1, y1);
-      console.log("y intercept:", yInterceptVal);
+      debug("y intercept:", yInterceptVal);
       let yValAtMaxX = yAtX(slopeVal, MAX_X, yInterceptVal);
-      console.log("max intercept:", yValAtMaxX);
+      debug("max intercept:", yValAtMaxX);
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
-      console.log("contact row", contactRowY);
+      debug("contact row", contactRowY);
       
       let xCoord = null;
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
-      console.log("x coordinate:", xCoord);
+      debug("x coordinate:", xCoord);
       var bounceCount = 0;
-      console.log("bounce count:", bounceCount);
+      debug("bounce count:", bounceCount);
       let newX2, newY2, newSlopeVal, newYInterceptVal, newYValAtMaxX;
       while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
-          console.log("bouncing off left side");
+          debug("bouncing off left side");
           [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal, MAX_X);
-          console.log("new x:", newX2, "new y:", newY2);
+          debug("new x:", newX2, "new y:", newY2);
 
           newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
-          console.log("new slope:", newSlopeVal);
+          debug("new slope:", newSlopeVal);
 
           newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
-          console.log("new y intercept:", newYInterceptVal);
+          debug("new y intercept:", newYInterceptVal);
 
           newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
-          console.log("new max intercept:", newYValAtMaxX);
+          debug("new max intercept:", newYValAtMaxX);
         } else if (xCoord > MAX_X) {
-          console.log("bouncing off right side");
+          debug("bouncing off right side");
           [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
-          console.log("new x:", newX2, "new y:", newY2);
+          debug("new x:", newX2, "new y:", newY2);
 
           newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
-          console.log("new slope:", newSlopeVal);
+          debug("new slope:", newSlopeVal);
 
           newYValAtMaxX = yValAtMaxX;
-          console.log("new max intercept:", newYValAtMaxX);
+          debug("new max intercept:", newYValAtMaxX);
 
           //let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
           newYInterceptVal = newY2;
-          console.log("new y intercept:", newYInterceptVal);
+          debug("new y intercept:", newYInterceptVal);
         }
 
         // common-code between the two bouce-options:
         xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
-        console.log(" new x coord:", xCoord);
+        debug(" new x coord:", xCoord);
 
         // redefine...
         slopeVal = newSlopeVal;
         yInterceptVal = newYInterceptVal;
         yValAtMaxX = newYValAtMaxX;
         bounceCount += 1;
-        console.log("bounce count:", bounceCount);
+        debug("bounce count:", bounceCount);
       }
       if (showBounceCount) {
-        console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
+        debug(`The ball appears to have bounced ${bounceCount}+ times...`)
       }
       
       if (x1 == x2) {
@@ -313,14 +321,14 @@
         // 1: move to the ball
         if (wereMakingAShotOnGoal) {
           //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
-          console.log("we're making a shot on goal");
+          debug("we're making a shot on goal");
         }
         let moveInfo = [xCoord, wereMakingAShotOnGoal];
-        console.log("move info:", moveInfo);
+        debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
-        // console.log(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
+        // debug(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
       } else {
-          console.log("x coord = null");
+          debug("x coord = null");
       }
 
       return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
@@ -407,11 +415,11 @@
       let currentY = document.getElementById('currentY').value;
       let previousX = document.getElementById('previousX').value;
       let previousY = document.getElementById('previousY').value;
-      console.log(JSON.stringify(currentX));
+      debug(JSON.stringify(currentX));
       var last = [parseInt(currentX), parseInt(currentY)];
-      console.log("last: " + JSON.stringify(last));
+      debug("last: " + JSON.stringify(last));
       var secondLast = [parseInt(previousX), parseInt(previousY)];
-      console.log("secondLast: " + JSON.stringify(secondLast));
+      debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
     }   
     
@@ -430,7 +438,12 @@
       }
       return matrix;
     }
-
+   
+    function debug(...msg) {
+      if (DEBUG == true) {
+        console.log(...msg);
+      }
+    }
   </script>
 </head>
 <body onload="main()">
