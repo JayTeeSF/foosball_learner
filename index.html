@@ -299,6 +299,10 @@
       if (showBounceCount) {
         console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
       }
+      
+      if (y1 == y2) {
+        xCoord = x1;
+      }
 
       if (xCoord != null) {
         // move all rows of players to or away from this Xposition
