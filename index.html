@@ -2,9 +2,9 @@
 <head>
   <title>Foosball training from video</title>
   <style>
-    canvas {
-      border: solid 2px;
-    }
+canvas {
+  border: solid 2px;
+}
   </style>
   <script>
     const DEBUG = true; // adjust this to silence the console.log statements
@@ -27,7 +27,7 @@
     var CANVAS = null;
     var WRAPPER = null;
     var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
-    
+
     function main() {
       CANVAS = document.getElementById('camera');
       CANVAS.width = MAX_X;
@@ -37,7 +37,7 @@
       WRAPPER.style.display = "none";
       getVideo(REAR_CAMERA_CONSTRAINTS);
     }
-    
+
     function getVideo(constraints=DEFAULT_CONSTRAINTS) {
       let permission = navigator.mediaDevices.getUserMedia(constraints);
       permission.then(
@@ -56,16 +56,16 @@
             if (!navigator.mediaDevices?.enumerateDevices) {
               console.warn("enumerateDevices() not supported.");
             } else {
-            // List cameras and microphones.
-            navigator.mediaDevices.enumerateDevices()
-              .then((devices) => {
-                devices.forEach((device) => {
-                  console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+              // List cameras and microphones.
+              navigator.mediaDevices.enumerateDevices()
+                .then((devices) => {
+                  devices.forEach((device) => {
+                    console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+                  });
+                })
+                .catch((err) => {
+                  console.error(`${err.name}: ${err.message}`);
                 });
-              })
-              .catch((err) => {
-                console.error(`${err.name}: ${err.message}`);
-              });
             }
             console.log(`Trying to get video using default camera...`);
             getVideo(); // try again with DEFAULT_CONSTRAINTS
@@ -74,25 +74,25 @@
               'Permissions have not been granted to use your camera and ' +
               'microphone, you need to allow the page access to your devices in ' +
               `order for the demo to work: ${err.name}`, err
-             );
+            );
           } else {
             alert(`Unable to access the camera; error: ${err.name} - ${err}`);
           }
         }
       );
     }
-    
+
     function updateThreshold() {
       thresholdControl = document.getElementById('thresholdCtrl');
       THRESHOLD=thresholdControl.value;
       return true;
     }
-    
+
     function handleSaveImage() {
       SAVE_IMAGE = true;
       return false;
     }
-    
+
     function showCounter() {
       alert(`updateImage has run ${UPDATE_IMAGE_COUNTER} times`);
     }
@@ -180,7 +180,7 @@
       return y2 > y1 ? true : false
       // return y2 > y1 ? false : true
     }
-    
+
     // y2 tells us where the ball is
     // wereMakingAShotOnGoal tells us the direction the ball is moving
     // ...so we know which playerRow we care about
@@ -204,15 +204,15 @@
       }
       return winning_pr;
     }
-    
+
     function yIntercept(slope, x, y) {
-        return y - slope * x;
+      return y - slope * x;
     }
-    
+
     function slope(x1,x2, y1,y2) {
       return (y2 - y1) / (x2 - x1);
     }
-    
+
     function yAtX(slope, x, yIntercept) {
       return slope * x + yIntercept;
     }
@@ -226,22 +226,22 @@
 
       return [whichNum, y];
     }
-    
+
     function shouldIHitTheBall(x1, x2, y1, y2, closestRow, timeBetweenGettingData, timeForMotorMove) {
-  var speed = (Math.abs(y2 - y1)) / (timeBetweenGettingData / 1000);
-  var distance = Math.abs(closestRow - y2);
-  var timeUntilImpact = distance / speed;
-  var m = -0.5 / timeForMotorMove;
-  var shouldIHit = m * timeUntilImpact + 1;
-  if (shouldIHit >= 0.5) {
-    debug("You should hit");
-    return true
-  } else {
-    debug("Too far to hit")
-    return false
-  }
-}
-    
+      var speed = (Math.abs(y2 - y1)) / (timeBetweenGettingData / 1000);
+      var distance = Math.abs(closestRow - y2); // this is probably wrong abs doesn't account for the direction the ball is moving
+      var timeUntilImpact = distance / speed;
+      var m = -0.5 / timeForMotorMove;
+      var shouldIHit = m * timeUntilImpact + 1;
+      if (shouldIHit >= 0.5) {
+        debug("You should hit");
+        return true
+      } else {
+        debug("Too far to hit")
+        return false
+      }
+    }
+
     function calculateMove(lastPos, secondLastPos, showBounceCount=false) {
       const x2 = lastPos[0];
       const y2 = lastPos[1];
@@ -258,7 +258,7 @@
       debug("max intercept:", yValAtMaxX);
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
       debug("contact row", contactRowY);
-      
+
       let xCoord = null;
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
       debug("x coordinate:", xCoord);
@@ -309,7 +309,7 @@
       if (showBounceCount) {
         debug(`The ball appears to have bounced ${bounceCount}+ times...`)
       }
-      
+
       if (x1 == x2) {
         xCoord = x1;
       }
@@ -328,7 +328,7 @@
         MOVE_TO_HISTORY.push(moveInfo);
         // debug(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
       } else {
-          debug("x coord = null");
+        debug("x coord = null");
       }
 
       return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
@@ -397,8 +397,8 @@
 
     // opt debug method
     function updateACanvas(matrix, canvas=CANVAS) {
-     let context = canvas.getContext('2d', CONTEXT_ATTRS)
-     let image   = context.getImageData(0, 0, MAX_X, MAX_Y);
+      let context = canvas.getContext('2d', CONTEXT_ATTRS)
+      let image   = context.getImageData(0, 0, MAX_X, MAX_Y);
       for (let i = 1; i <= MAX_Y; i++) {
         for (let j = 1; j <= MAX_X; j++) {
           let groupIndex = (i - 1) * MAX_X * 4 + (j - 1) * 4;
@@ -422,7 +422,7 @@
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
     }   
-    
+
     function getPixelMatrix(dataArray) {
       let matrix = [];
       for (let i = 1; i <= MAX_Y; i++) {
@@ -438,7 +438,7 @@
       }
       return matrix;
     }
-   
+
     function debug(...msg) {
       if (DEBUG == true) {
         console.log(...msg);
