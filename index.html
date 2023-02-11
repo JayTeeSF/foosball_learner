@@ -252,33 +252,34 @@
       console.log("x coordinate:", xCoord);
       var bounceCount = 0;
       console.log("bounce count:", bounceCount);
+      let newX2, newY2, newSlopeVal, newYInterceptVal, newYValAtMaxX
       while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
           console.log("bouncing off left side");
-          let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal, MAX_X);
+          [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal, MAX_X);
           console.log("new x:", newX2, "new y:", newY2);
 
-          let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
+          newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
           console.log("new slope:", newSlopeVal);
 
-          let newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
+          newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
           console.log("new y intercept:", newYInterceptVal);
 
-          let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
+          newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
           console.log("new max intercept:", newYValAtMaxX);
-        } elsif (xCoord > MAX_X) {
+        } else if (xCoord > MAX_X) {
           console.log("bouncing off right side");
-          let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
+          [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
           console.log("new x:", newX2, "new y:", newY2);
 
-          let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
+          newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
           console.log("new slope:", newSlopeVal);
 
-          let newYValAtMaxX = yValAtMaxX;
+          newYValAtMaxX = yValAtMaxX;
           console.log("new max intercept:", newYValAtMaxX);
 
           //let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
-          let newYInterceptVal = newY2;
+          newYInterceptVal = newY2;
           console.log("new y intercept:", newYInterceptVal);
         }
 
