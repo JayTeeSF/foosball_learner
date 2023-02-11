@@ -21,6 +21,11 @@ test numbers:
     Many Bounces: 
     53, 65, 72, 64 => 303.68767943067405, true // the new xCoord isnt becoming less than 300 so it keeps trying to bounce on the same side
 
+// observation: the y-coord is the ball moving up (or down) the board
+// so why (if the ball is moving from 64(second-last-y) to 65(last-y) would:
+//   a: we be trying to score (the ball is already moving away from our goalie)
+//   b: player-row-1 be the right row ...shouldn't it be player-row-2!! <-- we can't use absolute value for getPlayerRow... calculation!!!
+
 "53"
 last: [53,65]
 secondLast: [72,64]
