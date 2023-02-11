@@ -10,9 +10,9 @@
     const SIZE = 300;
     const MAX_X = SIZE;
     const MAX_Y = SIZE;
-    const PLAYER_ROW_1 = MAX_Y / 7;
+    const PLAYER_ROW_1 = MAX_Y / 7; // our goalie
     const PLAYER_ROW_2 = 3 * MAX_Y / 7;
-    const PLAYER_ROW_3 = 5 * MAX_Y / 7;
+    const PLAYER_ROW_3 = 5 * MAX_Y / 7; // our striker
     const INTERVAL = 42; //ms => 23 frames/sec
     const CONTEXT_ATTRS = { willReadFrequently: true };
     const COORD_HISTORY = [];
@@ -185,7 +185,7 @@
       let min = MAX_Y;
 
       for(let pr in [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3]) {
-        diff = (factor * (pr - y2));
+        diff = (factor * (y2 - pr));
         if ((diff > 0) && (diff <= min)) {
           min = diff;
         }
