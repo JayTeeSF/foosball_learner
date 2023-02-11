@@ -181,7 +181,7 @@
     }
     
     function getYCoordOfNextContactRow(y2, wereMakingAShotOnGoal) {
-      const factor = wereMakingAShotOnGoal ? -1 : 1;
+      const factor = wereMakingAShotOnGoal ? 1 : -1;
       let min = MAX_Y;
 
       for(let pr in [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3]) {
