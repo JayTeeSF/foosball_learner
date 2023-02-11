@@ -257,44 +257,41 @@
           console.log("bouncing off left side");
           let [newX2, newY2] = getPointOnNewLine(yValAtMaxX, yInterceptVal, wereMakingAShotOnGoal, MAX_X);
           console.log("new x:", newX2, "new y:", newY2);
+
           let newSlopeVal = slope(0,newX2, yInterceptVal,newY2);
           console.log("new slope:", newSlopeVal);
+
           let newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
           console.log("new y intercept:", newYInterceptVal);
+
           let newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
           console.log("new max intercept:", newYValAtMaxX);
-          xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
-          console.log(" new x coord:", xCoord);
-
-          // redefine...
-          slopeVal = newSlopeVal;
-          yInterceptVal = newYInterceptVal;
-          yValAtMaxX = newYValAtMaxX;
-          bounceCount += 1;
-          console.log("bounce count:", bounceCount);
-        }
-
-        if (xCoord > MAX_X) {
+        } elsif (xCoord > MAX_X) {
           console.log("bouncing off right side");
           let [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
           console.log("new x:", newX2, "new y:", newY2);
+
           let newSlopeVal = slope(MAX_X,newX2, yValAtMaxX,newY2);
           console.log("new slope:", newSlopeVal);
+
           let newYValAtMaxX = yValAtMaxX;
           console.log("new max intercept:", newYValAtMaxX);
+
           //let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
           let newYInterceptVal = newY2;
           console.log("new y intercept:", newYInterceptVal);
-          xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
-          console.log(" new x coord:", xCoord);
-
-          // redefine...
-          slopeVal = newSlopeVal;
-          yInterceptVal = newYInterceptVal;
-          yValAtMaxX = newYValAtMaxX;
-          bounceCount += 1;
-          console.log("bounce count:", bounceCount);
         }
+
+        // common-code between the two bouce-options:
+        xCoord = (contactRowY - newYInterceptVal) / newSlopeVal;
+        console.log(" new x coord:", xCoord);
+
+        // redefine...
+        slopeVal = newSlopeVal;
+        yInterceptVal = newYInterceptVal;
+        yValAtMaxX = newYValAtMaxX;
+        bounceCount += 1;
+        console.log("bounce count:", bounceCount);
       }
       if (showBounceCount) {
         console.log(`The ball appears to have bounced ${bounceCount}+ times...`)
