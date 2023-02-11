@@ -13,136 +13,44 @@ test numbers:
   on current main branch:
     No Bounces:
     53, 65, 72, 81 => 127.8125,false (probably correct)
+    53, 65, 72, 58 => 113.10204081632655,true
 
-    Many Bounces:
-    22, 32, 55, 17 => -44.00000000000001,true
-    53, 65, 72, 58 => -118,true
-# looks like we're doing integer arithmetic and we need to use decimals...
-# why is it only bouncing on ONE side ?!?!
+    One Bounce:
+    22, 32, 55, 17 => 1.8857142857142792, true
 
-    last: [53,65]
-index.html:410 secondLast: [72,58]
-index.html:238 x1:  72 x2:  53 y1:  58 y2:  65
-index.html:240 Do we shoot true
-index.html:242 slope: -0.3684210526315789
-index.html:244 y intercept: 84.52631578947368
-index.html:246 max intercept: -26
-index.html:248 contact row 128
-index.html:252 x coordinate: -118
-index.html:254 bounce count: 0
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 1
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 2
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 3
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 4
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 5
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 6
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -26
-index.html:263 new slope: -0.3684210526315789
-index.html:266 new y intercept: 84.52631578947368
-index.html:269 new max intercept: -26
-index.html:288  new x coord: -118
-index.html:295 bounce count: 7
-index.html:312 we're making a shot on goal
-index.html:315 move info: (2) [-118, true]
-index.html:406 "22"
-index.html:408 last: [22,32]
-index.html:410 secondLast: [55,17]
-index.html:238 x1:  55 x2:  22 y1:  17 y2:  32
-index.html:240 Do we shoot true
-index.html:242 slope: -0.45454545454545453
-index.html:244 y intercept: 42
-index.html:246 max intercept: -94.36363636363635
-index.html:248 contact row 62
-index.html:252 x coordinate: -44
-index.html:254 bounce count: 0
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 1
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 2
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 3
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 4
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 5
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 6
-index.html:258 bouncing off left side
-index.html:260 new x: 300 new y: -94.36363636363635
-index.html:263 new slope: -0.4545454545454545
-index.html:266 new y intercept: 42
-index.html:269 new max intercept: -94.36363636363635
-index.html:288  new x coord: -44.00000000000001
-index.html:295 bounce count: 7
-index.html:312 we're making a shot on goal
-index.html:315 move info: (2) [-44.00000000000001, true]
-PLAYER_ROW_2
-128.57142857142858
+    Many Bounces: ??
 
+last: [22,32]
+secondLast: [55,17]
+x1:  55 x2:  22 y1:  17 y2:  32
+Do we shoot true
+slope: -0.45454545454545453
+y intercept: 42
+max intercept: -94.36363636363635
+winning_pr: 42.857142857142854
+contact row 42.857142857142854
+x coordinate: -1.885714285714279
+bounce count: 0
+bouncing off left side
+new x: 300 new y: 178.36363636363635
+new slope: 0.4545454545454545
+new y intercept: 42
+new max intercept: 178.36363636363635
+ new x coord: 1.8857142857142792
+bounce count: 1
+we're making a shot on goal
+move info: (2) [1.8857142857142792, true]
+
+last: [53,65]
+secondLast: [72,58]
+x1:  72 x2:  53 y1:  58 y2:  65
+Do we shoot true
+slope: -0.3684210526315789
+y intercept: 84.52631578947368
+max intercept: -26
+winning_pr: 42.857142857142854
+contact row 42.857142857142854
+x coordinate: 113.10204081632655
+bounce count: 0
+we're making a shot on goal
+move info: (2) [113.10204081632655, true]

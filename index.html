@@ -181,16 +181,20 @@
     }
     
     function getYCoordOfNextContactRow(y2, wereMakingAShotOnGoal) {
-      const factor = wereMakingAShotOnGoal ? 1 : -1;
       let min = MAX_Y;
 
-      for(let pr in [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3]) {
-        diff = (factor * (y2 - pr));
+      winning_pr = null;
+      prs = [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3];
+      for(let i = 0; i < prs.length; i++) {
+        let pr = prs[i];
+        diff = Math.abs(y2 - pr);
         if ((diff > 0) && (diff <= min)) {
           min = diff;
+          console.log(`winning_pr: ${pr}`);
+          winning_pr = pr
         }
       }
-      return min + y2;
+      return winning_pr;
     }
     
     function yIntercept(slope, x, y) {
@@ -208,7 +212,7 @@
     function getPointOnNewLine(unknownY, knownY, wereMakingAShotOnGoal, whichNum) {
       const yInterceptVal = Math.abs(knownY);
       const yValAtMaxX = Math.abs(unknownY);
-      const factor = wereMakingAShotOnGoal ? -1 : 1;
+      const factor = wereMakingAShotOnGoal ? 1 : -1;
 
       const y = knownY + factor * (yInterceptVal + yValAtMaxX);
 
@@ -252,7 +256,7 @@
       console.log("x coordinate:", xCoord);
       var bounceCount = 0;
       console.log("bounce count:", bounceCount);
-      let newX2, newY2, newSlopeVal, newYInterceptVal, newYValAtMaxX
+      let newX2, newY2, newSlopeVal, newYInterceptVal, newYValAtMaxX;
       while ((bounceCount < 7) && ((xCoord < 0) || (xCoord > MAX_X))) {
         if (xCoord < 0) { // bouncing off wall at yIntercept
           console.log("bouncing off left side");
