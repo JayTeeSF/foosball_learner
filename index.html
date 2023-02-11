@@ -188,12 +188,12 @@ canvas {
       let min = MAX_Y;
 
       winning_pr = null;
-      const factor = wereMakingAShotOnGoal ? 1 : -1;
+      // const factor = wereMakingAShotOnGoal ? 1 : -1;
       prs = [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3];
       for(let i = 0; i < prs.length; i++) {
         let pr = prs[i];
-        // TBD: change `diff` to support standard-screen pixel-coords vs. quadrant-I
-        diff = (factor * (y2 - pr));
+        // TBD: reverse `diff` to support standard-screen pixel-coords vs. quadrant-I
+        diff = wereMakingAShotOnGoal ? (pr - y2) : (y2 - pr);
 
         // don't chose a player row that is "behind" the ball ...even if it's closer!
         if ((diff > 0) && (diff <= min)) {
@@ -201,6 +201,7 @@ canvas {
           debug(`winning_pr: ${pr}`);
           winning_pr = pr
         }
+        debug(`diff: ${diff}; win: ${winning_pr}, pr: ${pr}, y2: ${y2}, shot: ${wereMakingAShotOnGoal}`);
       }
       return winning_pr;
     }
