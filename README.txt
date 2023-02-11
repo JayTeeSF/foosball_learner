@@ -12,11 +12,11 @@ test numbers:
 
   on current main branch:
     No Bounces:
-    53, 65, 72, 81 => 127.8125,false (probably correct)
-    53, 65, 72, 58 => 113.10204081632655,true
+    53, 65, 72, 81 => 127.8125,false (probably correct) // now 128.49107142857144,false
+    53, 65, 72, 58 => 113.10204081632655,true // now 113.10204081632655,true
 
     One Bounce:
-    22, 32, 55, 17 => 1.8857142857142792, true
+    22, 32, 55, 17 => 1.8857142857142792, true // now 92.4,true
 
     Many Bounces: 
     53, 65, 72, 64 => 303.68767943067405, true // the new xCoord isnt becoming less than 300 so it keeps trying to bounce on the same side
