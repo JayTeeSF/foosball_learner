@@ -19,6 +19,8 @@ test numbers:
     22, 32, 55, 17 => 1.8857142857142792, true
     53, 65, 72, 64 => 152.2219432588502, true
 
+    285, 168, 200, 170 => 265.7584683357879, false
+
     Many Bounces: 
 
 "53"
@@ -87,3 +89,30 @@ x coordinate: 113.10204081632655
 bounce count: 0
 we're making a shot on goal
 move info: (2) [113.10204081632655, true]
+
+JJS Test:
+
+"285"
+(index):445 last: [285,168]
+(index):445 secondLast: [200,170]
+(index):445 x1:  200 x2:  285 y1:  170 y2:  168
+(index):445 Do we shoot false
+(index):445 slope: -0.023529411764705882
+(index):445 y intercept: 174.7058823529412
+(index):445 max intercept: 167.64705882352942
+(index):445 winning_pr: 42.857142857142854
+(index):445 diff: 125.14285714285714; win: 42.857142857142854, pr: 42.857142857142854, y2: 168, shot: false
+(index):445 winning_pr: 128.57142857142858
+(index):445 diff: 39.428571428571416; win: 128.57142857142858, pr: 128.57142857142858, y2: 168, shot: false
+(index):445 diff: -46.28571428571428; win: 128.57142857142858, pr: 214.28571428571428, y2: 168, shot: false
+(index):445 contact row 128.57142857142858
+(index):445 x coordinate: 1960.7142857142858
+(index):445 bounce count: 0
+(index):445 bouncing off right side
+(index):445 new x: 0 new y: -174.7058823529412
+(index):445 new slope: 1.1411764705882355
+(index):445 new max intercept: 167.64705882352942
+(index):445 new y intercept: -174.7058823529412
+(index):445  new x coord: 265.7584683357879
+(index):445 bounce count: 1
+(index):445 move info: (2) [265.7584683357879, false]
