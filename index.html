@@ -219,11 +219,12 @@ canvas {
     }
 
     function getPointOnNewLine(unknownY, knownY, wereMakingAShotOnGoal, whichNum) {
-      const yInterceptVal = Math.abs(knownY);
-      const yValAtMaxX = Math.abs(unknownY);
+      //const yInterceptVal = Math.abs(knownY);
+      //const yValAtMaxX = Math.abs(unknownY);
       const factor = wereMakingAShotOnGoal ? 1 : -1;
 
-      const y = knownY + factor * (yInterceptVal + yValAtMaxX);
+      //const y = knownY + side * (yInterceptVal + yValAtMaxX);
+      const y = knownY + side * Math.abs(knownY - unknownY);
 
       return [whichNum, y];
     }
