@@ -224,7 +224,7 @@ canvas {
       const factor = wereMakingAShotOnGoal ? 1 : -1;
 
       //const y = knownY + side * (yInterceptVal + yValAtMaxX);
-      const y = knownY + side * Math.abs(knownY - unknownY);
+      const y = knownY + factor * Math.abs(knownY - unknownY);
 
       return [whichNum, y];
     }
