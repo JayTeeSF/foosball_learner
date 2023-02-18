@@ -263,6 +263,8 @@ canvas {
     }
 
     function calculateMove(lastPos, secondLastPos, showBounceCount=false) {
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      console.log("clearing canvas")
       const x2 = lastPos[0];
       const y2 = lastPos[1];
       const x1 = secondLastPos[0];
