@@ -28,6 +28,16 @@ canvas {
     var WRAPPER = null;
     var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
 
+    
+    function drawLine(ctx, begin, end, stroke = 'red', width = 3) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(...begin);
+        ctx.lineTo(...end);
+        ctx.stroke();
+     }
+    
     function main() {
       CANVAS = document.getElementById('camera');
       CANVAS.width = MAX_X;
@@ -423,6 +433,9 @@ canvas {
       var secondLast = [parseInt(previousX), parseInt(previousY)];
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
+      const cnvs = document.getElementById('displayPath');
+      const ctx = canvas.getContext('2d');
+      drawLine(ctx, [currentX, currentY], [previousX, previousY]);
     }   
 
     function getPixelMatrix(dataArray) {
@@ -465,6 +478,7 @@ canvas {
     <input id="previousY" type="number" min="0" max="300" placeholder="prev Y coord" />
     <button id="calculateMove" onclick="calculateWhereToMove();">Calculate Move</button>
     <br />
+    <canvas id="displayPath"></canvas>
     <div id="wrapper">
       <canvas id="grayScaleCanvas"></canvas>
     </div>
