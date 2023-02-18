@@ -434,7 +434,7 @@ canvas {
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
       const cnvs = document.getElementById('displayPath');
-      const ctx = canvas.getContext('2d');
+      const ctx = cnvs.getContext('2d');
       drawLine(ctx, [currentX, currentY], [previousX, previousY]);
     }   
 
