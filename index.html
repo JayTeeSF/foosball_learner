@@ -22,7 +22,7 @@ canvas {
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
     const cvs = document.getElementById('displayPath');
-    const ctx = cvs.getContext('2d');
+    const ctx = null;
     var OBJECT_PROP = null;
     var UPDATE_IMAGE_COUNTER = 0;
     var THRESHOLD = 40;
@@ -42,6 +42,7 @@ canvas {
      }
     
     function main() {
+      ctx = cvs.getContext('2d');
       cvs.width = MAX_X;
       cvs.height = MAX_Y;
       CANVAS = document.getElementById('camera');
