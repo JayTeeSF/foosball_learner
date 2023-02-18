@@ -30,6 +30,12 @@ canvas {
     var WRAPPER = null;
     var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
 
+    function drawBall(x, y, r = 5) {
+        console.log("drawing the ball");
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle="black";
+        ctx.fill();
     
     function drawLine(begin, end, stroke = 'red', width = 3) {
         ctx.strokeStyle = stroke;
@@ -354,7 +360,7 @@ canvas {
       } else {
         debug("x coord = null");
       }
-
+      drawBall(x2, y2);
       return MOVE_TO_HISTORY[MOVE_TO_HISTORY.length - 1];
     }
 
