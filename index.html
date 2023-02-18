@@ -433,8 +433,8 @@ canvas {
       var secondLast = [parseInt(previousX), parseInt(previousY)];
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
-      const cnvs = document.getElementById('displayPath');
-      const ctx = cnvs.getContext('2d');
+      var cvs = document.getElementById('displayPath');
+      var ctx = cvs.getContext('2d');
       drawLine(ctx, [currentX, currentY], [previousX, previousY]);
     }   
 
