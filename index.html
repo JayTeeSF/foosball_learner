@@ -209,7 +209,7 @@ canvas {
       prs = [PLAYER_ROW_1, PLAYER_ROW_2, PLAYER_ROW_3];
       for(let i = 0; i < prs.length; i++) {
         let pr = prs[i];
-        drawLine([0, pr], [MAX_X, pr], 'white');
+        drawLine([0, pr], [MAX_X, pr], 'blue');
         // TBD: reverse `diff` to support standard-screen pixel-coords vs. quadrant-I
         diff = wereMakingAShotOnGoal ? (pr - y2) : (y2 - pr);
 
