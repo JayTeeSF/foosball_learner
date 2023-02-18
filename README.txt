@@ -119,61 +119,61 @@ JJS Test:
 
 New Answer:
 
-last: [200,170]
-(index):446 secondLast: [285,168]
-(index):446 x1:  285 x2:  200 y1:  168 y2:  170
-(index):446 Do we shoot true
+last: [285,168]
+(index):446 secondLast: [200,170]
+(index):446 x1:  200 x2:  285 y1:  170 y2:  168
+(index):446 Do we shoot false
 (index):446 slope: -0.023529411764705882
 (index):446 y intercept: 174.7058823529412
 (index):446 max intercept: 167.64705882352942
-(index):446 diff: -127.14285714285714; win: null, pr: 42.857142857142854, y2: 170, shot: true
-(index):446 diff: -41.428571428571416; win: null, pr: 128.57142857142858, y2: 170, shot: true
-(index):446 winning_pr: 214.28571428571428
-(index):446 diff: 44.28571428571428; win: 214.28571428571428, pr: 214.28571428571428, y2: 170, shot: true
-(index):446 contact row 214.28571428571428
-(index):446 x coordinate: -1682.1428571428564
+(index):446 winning_pr: 42.857142857142854
+(index):446 diff: 125.14285714285714; win: 42.857142857142854, pr: 42.857142857142854, y2: 168, shot: false
+(index):446 winning_pr: 128.57142857142858
+(index):446 diff: 39.428571428571416; win: 128.57142857142858, pr: 128.57142857142858, y2: 168, shot: false
+(index):446 diff: -46.28571428571428; win: 128.57142857142858, pr: 214.28571428571428, y2: 168, shot: false
+(index):446 contact row 128.57142857142858
+(index):446 x coordinate: 1960.7142857142858
 (index):446 bounce count: 0
-(index):446 bouncing off left side
-(index):446 new x: 300 new y: 181.76470588235296
+(index):446 bouncing off right side
+(index):446 new x: 0 new y: 160.58823529411765
 (index):446 new slope: 0.023529411764705892
-(index):446 new y intercept: 174.7058823529412
-(index):446 new max intercept: 181.76470588235296
-(index):446  new x coord: 1682.1428571428555
+(index):446 new max intercept: 167.64705882352942
+(index):446 new y intercept: 160.58823529411765
+(index):446  new x coord: -1360.7142857142849
 (index):446 bounce count: 1
-(index):446 bouncing off right side
-(index):446 new x: 0 new y: 188.82352941176472
+(index):446 bouncing off left side
+(index):446 new x: 300 new y: 153.52941176470588
 (index):446 new slope: -0.023529411764705892
-(index):446 new max intercept: 181.76470588235296
-(index):446 new y intercept: 188.82352941176472
-(index):446  new x coord: -1082.1428571428555
+(index):446 new y intercept: 160.58823529411765
+(index):446 new max intercept: 153.52941176470588
+(index):446  new x coord: 1360.7142857142849
 (index):446 bounce count: 2
-(index):446 bouncing off left side
-(index):446 new x: 300 new y: 195.8823529411765
+(index):446 bouncing off right side
+(index):446 new x: 0 new y: 146.47058823529412
 (index):446 new slope: 0.023529411764705892
-(index):446 new y intercept: 188.82352941176472
-(index):446 new max intercept: 195.8823529411765
-(index):446  new x coord: 1082.1428571428555
+(index):446 new max intercept: 153.52941176470588
+(index):446 new y intercept: 146.47058823529412
+(index):446  new x coord: -760.7142857142848
 (index):446 bounce count: 3
-(index):446 bouncing off right side
-(index):446 new x: 0 new y: 202.94117647058826
-(index):446 new slope: -0.023529411764705892
-(index):446 new max intercept: 195.8823529411765
-(index):446 new y intercept: 202.94117647058826
-(index):446  new x coord: -482.1428571428555
-(index):446 bounce count: 4
 (index):446 bouncing off left side
-(index):446 new x: 300 new y: 210.00000000000003
-(index):446 new slope: 0.023529411764705892
-(index):446 new y intercept: 202.94117647058826
-(index):446 new max intercept: 210.00000000000003
-(index):446  new x coord: 482.1428571428555
-(index):446 bounce count: 5
-(index):446 bouncing off right side
-(index):446 new x: 0 new y: 217.0588235294118
+(index):446 new x: 300 new y: 139.41176470588235
 (index):446 new slope: -0.023529411764705892
-(index):446 new max intercept: 210.00000000000003
-(index):446 new y intercept: 217.0588235294118
-(index):446  new x coord: 117.8571428571445
+(index):446 new y intercept: 146.47058823529412
+(index):446 new max intercept: 139.41176470588235
+(index):446  new x coord: 760.7142857142848
+(index):446 bounce count: 4
+(index):446 bouncing off right side
+(index):446 new x: 0 new y: 132.35294117647058
+(index):446 new slope: 0.023529411764705892
+(index):446 new max intercept: 139.41176470588235
+(index):446 new y intercept: 132.35294117647058
+(index):446  new x coord: -160.71428571428478
+(index):446 bounce count: 5
+(index):446 bouncing off left side
+(index):446 new x: 300 new y: 125.29411764705881
+(index):446 new slope: -0.023529411764705892
+(index):446 new y intercept: 132.35294117647058
+(index):446 new max intercept: 125.29411764705881
+(index):446  new x coord: 160.71428571428478
 (index):446 bounce count: 6
-(index):446 we're making a shot on goal
-(index):446 move info: (2) [117.8571428571445, true]
+(index):446 move info: (2) [160.71428571428478, false]
