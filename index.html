@@ -21,10 +21,6 @@ canvas {
     const timeForMotorMove = 1 //sec => still need to figure it out
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
-    const cvs = document.getElementById('displayPath');
-    cvs.width = MAX_X;
-    cvs.height = MAX_Y;
-    const ctx = cvs.getContext('2d');
     var OBJECT_PROP = null;
     var UPDATE_IMAGE_COUNTER = 0;
     var THRESHOLD = 40;
@@ -34,16 +30,20 @@ canvas {
 
     
     function drawLine(begin, end, stroke = 'red', width = 3) {
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = width;
-        ctx.beginPath();
-        ctx.moveTo(...begin);
-        ctx.lineTo(...end);
-        ctx.stroke();
+        context.strokeStyle = stroke;
+        context.lineWidth = width;
+        context.beginPath();
+        context.moveTo(...begin);
+        context.lineTo(...end);
+        context.stroke();
         console.log("Drawing a Line");
      }
     
     function main() {
+      const cvs = document.getElementById('displayPath');
+      cvs.width = MAX_X;
+      cvs.height = MAX_Y;
+      const context = cvs.getContext('2d');
       CANVAS = document.getElementById('camera');
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
