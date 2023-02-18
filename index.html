@@ -434,6 +434,8 @@ canvas {
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
       var cvs = document.getElementById('displayPath');
+      cvs.width = MAX_X;
+      cvs.height = MAX_Y;
       var ctx = cvs.getContext('2d');
       drawLine(ctx, [currentX, currentY], [previousX, previousY]);
     }   
