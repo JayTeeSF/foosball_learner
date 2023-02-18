@@ -278,6 +278,7 @@ canvas {
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
       debug("contact row", contactRowY);
       drawLine([0, yInterceptVal], [MAX_X, yValAtMaxX]);
+      drawLine([0, contactRowY], [MAX_X, contactRowY], 'green');
       let xCoord = null;
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
       debug("x coordinate:", xCoord);
