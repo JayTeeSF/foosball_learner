@@ -21,7 +21,7 @@ canvas {
     const timeForMotorMove = 1 //sec => still need to figure it out
     const DEFAULT_CONSTRAINTS = {video: true};
     const REAR_CAMERA_CONSTRAINTS = {video: {facingMode: 'environment'}};
-    const cvs = document.getElementById('displayPath');
+    const cvs = null;
     const ctx = null;
     var OBJECT_PROP = null;
     var UPDATE_IMAGE_COUNTER = 0;
@@ -42,6 +42,7 @@ canvas {
      }
     
     function main() {
+      cvs = document.getElementById('displayPath');
       ctx = cvs.getContext('2d');
       cvs.width = MAX_X;
       cvs.height = MAX_Y;
