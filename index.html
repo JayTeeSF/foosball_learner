@@ -30,12 +30,12 @@ canvas {
 
     
     function drawLine(begin, end, stroke = 'red', width = 3) {
-        context.strokeStyle = stroke;
-        context.lineWidth = width;
-        context.beginPath();
-        context.moveTo(...begin);
-        context.lineTo(...end);
-        context.stroke();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(...begin);
+        ctx.lineTo(...end);
+        ctx.stroke();
         console.log("Drawing a Line");
      }
     
@@ -43,7 +43,7 @@ canvas {
       const cvs = document.getElementById('displayPath');
       cvs.width = MAX_X;
       cvs.height = MAX_Y;
-      const context = cvs.getContext('2d');
+      const ctx = cvs.getContext('2d');
       CANVAS = document.getElementById('camera');
       CANVAS.width = MAX_X;
       CANVAS.height = MAX_Y;
