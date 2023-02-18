@@ -29,14 +29,18 @@ canvas {
     var SAVE_IMAGE = true; // save the first one by default -- so it works on phones!
 
     
-    function drawLine(ctx, begin, end, stroke = 'red', width = 3) {
+    function drawLine(begin, end, stroke = 'red', width = 3) {
+        var cvs = document.getElementById('displayPath');
+        cvs.width = MAX_X;
+        cvs.height = MAX_Y;
+        var ctx = cvs.getContext('2d');
         ctx.strokeStyle = stroke;
         ctx.lineWidth = width;
         ctx.beginPath();
         ctx.moveTo(...begin);
         ctx.lineTo(...end);
         ctx.stroke();
-        console.log("Drawing a Line")
+        console.log("Drawing a Line");
      }
     
     function main() {
@@ -271,7 +275,7 @@ canvas {
       debug("max intercept:", yValAtMaxX);
       const contactRowY = getYCoordOfNextContactRow(y2,wereMakingAShotOnGoal);
       debug("contact row", contactRowY);
-
+      drawLine([0, yInterceptVal], [MAX_X, yValAtMaxX]);
       let xCoord = null;
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
       debug("x coordinate:", xCoord);
@@ -289,9 +293,9 @@ canvas {
 
           newYInterceptVal = yIntercept(newSlopeVal, 0, yInterceptVal);
           debug("new y intercept:", newYInterceptVal);
-
           newYValAtMaxX = yAtX(newSlopeVal, MAX_X, newYInterceptVal);
           debug("new max intercept:", newYValAtMaxX);
+          drawLine([0, newYInterceptVal], [MAX_X, newYValAtMaxX]);
         } else if (xCoord > MAX_X) {
           debug("bouncing off right side");
           [newX2, newY2] = getPointOnNewLine(yInterceptVal, yValAtMaxX, wereMakingAShotOnGoal, 0);
@@ -306,6 +310,7 @@ canvas {
           //let newYInterceptVal = yIntercept(newSlopeVal, MAX_X, yValAtMaxX);
           newYInterceptVal = newY2;
           debug("new y intercept:", newYInterceptVal);
+          drawLine([0, newYInterceptVal], [MAX_X, newYValAtMaxX]);
         }
 
         // common-code between the two bouce-options:
@@ -434,11 +439,6 @@ canvas {
       var secondLast = [parseInt(previousX), parseInt(previousY)];
       debug("secondLast: " + JSON.stringify(secondLast));
       alert(calculateMove(last, secondLast));
-      var cvs = document.getElementById('displayPath');
-      cvs.width = MAX_X;
-      cvs.height = MAX_Y;
-      var ctx = cvs.getContext('2d');
-      drawLine(ctx, [currentX, currentY], [previousX, previousY]);
     }   
 
     function getPixelMatrix(dataArray) {
