@@ -451,7 +451,9 @@ canvas {
       debug("last: " + JSON.stringify(last));
       var secondLast = [parseInt(previousX), parseInt(previousY)];
       debug("secondLast: " + JSON.stringify(secondLast));
-      alert(calculateMove(last, secondLast));
+      var answerResult = calculateMove(last, secondLast);
+      document.getElementById("resultDisplay") = JSON.stringify(answerResult);
+      alert(answerResult);
     }   
 
     function getPixelMatrix(dataArray) {
