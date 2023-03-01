@@ -452,7 +452,7 @@ canvas {
       var secondLast = [parseInt(previousX), parseInt(previousY)];
       debug("secondLast: " + JSON.stringify(secondLast));
       var answerResult = calculateMove(last, secondLast);
-      document.getElementById("resultDisplay").value = JSON.stringify(answerResult);
+      document.getElementById("resultDisplay").innerHTML = JSON.stringify(answerResult);
       alert(answerResult);
     }   
 
