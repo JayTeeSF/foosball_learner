@@ -389,6 +389,7 @@ canvas {
           var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
         } else {
           var timeToHit = "Not making Shot on Goal"
+        }
         let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
