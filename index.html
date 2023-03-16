@@ -286,10 +286,12 @@ canvas {
     function shouldIHitYet(speed, dist, hitTime) {
       var timeTillImpact = dist / speed;
       if (timeTillImpact <= hitTime) {
-        console.log("Hit Boy");
+       console.log("Hit Boy");
+        timeToHit = "HIT"
        return true;
      } else {
         console.log("STAY STIILL");
+       timeToHit = "NOT YET"
        return false
       }
     }
@@ -383,7 +385,8 @@ canvas {
           //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
           debug("we're making a shot on goal");
         }
-        let timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
+        var timeToHit = 0;
+        determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
         let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
