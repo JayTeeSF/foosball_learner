@@ -286,12 +286,12 @@ canvas {
     function shouldIHitYet(speed, dist, hitTime) {
       var timeTillImpact = dist / speed;
       if (timeTillImpact <= hitTime) {
-       console.log("Hit Boy");
-        timeToHit = "HIT"
+       timeToHit = true;
+       console.log(timeToHit);
        return true;
      } else {
-        console.log("STAY STIILL");
-       timeToHit = "NOT YET"
+       timeToHit = false;
+       console.log(timeToHit);
        return false
       }
     }
