@@ -386,7 +386,11 @@ canvas {
           debug("we're making a shot on goal");
         }
         var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
-        let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
+        if (wereMakingAShotOnGoal) {
+          let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
+        } else {
+          let moveInfo = [xCoord, wereMakingAShotOnGoal];
+        }
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
         // debug(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
