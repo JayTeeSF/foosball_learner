@@ -276,11 +276,11 @@ canvas {
     }
 
     function determineDistance(points, timeBetweenInputs, distanceFromRow, timeForHit) {
-      return determineSpeed( Math.abs((points[1] - points[3]) / (points[0] - points[2])), timeBetweenInputs, distanceFromRow, timeForHit);
+      return determineSpeed(Math.sqrt(Math.pow(distance[1] - distance[3], 2) + Math.pow(distance[0] - distance[2], 2))), timeBetweenInputs, distanceFromRow, timeForHit);
     }
 
     function determineSpeed(distance, time, distanceFromRow, timeForHit) {
-      console.log("Speed:",distance / time);
+      console.log("Speed:", distance / time);
       return shouldIHitYet(distance / time, distanceFromRow, timeForHit);
     }
 
