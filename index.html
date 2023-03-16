@@ -276,11 +276,11 @@ canvas {
     }
 
     function determineDistance(points, timeBetweenInputs, distanceFromRow, timeForHit) {
-      return determineSpeed(((points[1] - points[3]) / (points[0] - points[2])), timeBetweenInputs, distanceFromRow, timeForHit);
+      return determineSpeed( Math.abs((points[1] - points[3]) / (points[0] - points[2])), timeBetweenInputs, distanceFromRow, timeForHit);
     }
 
     function determineSpeed(distance, time, distanceFromRow, timeForHit) {
-      console.log("Speed:", distance / time);
+      console.log("Speed:",distance / time);
       return shouldIHitYet(distance / time, distanceFromRow, timeForHit);
     }
 
@@ -388,7 +388,7 @@ canvas {
           debug("we're making a shot on goal");
         }
         if (wereMakingAShotOnGoal) {
-          var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
+          var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL, calculateDistance(distance), 2000);
         } else {
           var timeToHit = "Not making Shot on Goal"
         }
