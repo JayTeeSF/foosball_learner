@@ -270,7 +270,7 @@ canvas {
     }
 
     function calculateDistance(distance) {
-      var finalDistance = (distance[1] - distance[3]) / (distance[0] - distance[2]);
+      var finalDistance = Math.sqrt(Math.pow(distance[1] - distance[3], 2) + Math.pow(distance[0] - distance[2], 2));
       console.log("Final Distance:", finalDistance);
       return finalDistance;
     }
