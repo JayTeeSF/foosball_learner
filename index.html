@@ -280,11 +280,13 @@ canvas {
     }
 
     function determineSpeed(distance, time, distanceFromRow, timeForHit) {
-     return shouldIHitYet(distance / time, distanceFromRow, timeForHit);
+      console.log("Speed:", distance / time);
+      return shouldIHitYet(distance / time, distanceFromRow, timeForHit);
     }
 
     function shouldIHitYet(speed, dist, hitTime) {
       var timeTillImpact = dist / speed;
+      console.log(timeTillImpact);
       if (timeTillImpact <= hitTime) {
        var hitTime = true;
        console.log(hitTime);
