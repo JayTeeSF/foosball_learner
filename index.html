@@ -269,6 +269,12 @@ canvas {
       }
     }
 
+    function calculateDistance(distance) {
+      var finalDistance = (distance[1] - distance[3]) / (distance[0] - distance[2]);
+      console.log("Final Distance:", finalDistance);
+      return finalDistance;
+    }
+    
     function calculateMove(lastPos, secondLastPos, showBounceCount=false) {
       ctx.clearRect(0, 0, cvs.width, cvs.height);
       console.log("clearing canvas")
@@ -293,6 +299,7 @@ canvas {
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
       var distance = [x2, y2, xCoord, contactRowY];
       console.log("Distance:", distance);
+      calculateDistance(distance);
       debug("x coordinate:", xCoord);
       var bounceCount = 0;
       debug("bounce count:", bounceCount);
