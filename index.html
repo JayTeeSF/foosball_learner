@@ -385,12 +385,11 @@ canvas {
           //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
           debug("we're making a shot on goal");
         }
-        var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
         if (wereMakingAShotOnGoal) {
-          let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
+          var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
         } else {
-          let moveInfo = [xCoord, wereMakingAShotOnGoal];
-        }
+          var timeToHit = "Not making Shot on Goal"
+        let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
         // debug(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
