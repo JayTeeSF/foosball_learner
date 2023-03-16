@@ -274,6 +274,25 @@ canvas {
       console.log("Final Distance:", finalDistance);
       return finalDistance;
     }
+
+    function determineDistance(points, timeBetweenInputs, distanceFromRow, timeForHit) {
+      determineSpeed(((points[1] - points[3]) / (points[0] - points[2])), timeBetweenInputs, distanceFromRow, timeForHit);
+    }
+
+    function determineSpeed(distance, time, distanceFromRow, timeForHit) {
+     shouldIHitYet(distance / time, distanceFromRow, timeForHit);
+    }
+
+    function shouldIHitYet(speed, dist, hitTime) {
+      var timeTillImpact = dist / speed;
+      if (timeTillImpact <= hitTime) {
+        console.log("Hit Boy");
+       return true;
+     } else {
+        console.log("STAY STIILL");
+       return false
+      }
+    }
     
     function calculateMove(lastPos, secondLastPos, showBounceCount=false) {
       ctx.clearRect(0, 0, cvs.width, cvs.height);
@@ -299,7 +318,8 @@ canvas {
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
       var distance = [x2, y2, xCoord, contactRowY];
       console.log("Distance:", distance);
-      calculateDistance(distance);
+      //calculateDistance(distance);
+      determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
       debug("x coordinate:", xCoord);
       var bounceCount = 0;
       debug("bounce count:", bounceCount);
