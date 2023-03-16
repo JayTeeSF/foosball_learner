@@ -319,7 +319,7 @@ canvas {
       var distance = [x2, y2, xCoord, contactRowY];
       console.log("Distance:", distance);
       //calculateDistance(distance);
-      determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
+      //determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
       debug("x coordinate:", xCoord);
       var bounceCount = 0;
       debug("bounce count:", bounceCount);
@@ -383,7 +383,8 @@ canvas {
           //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
           debug("we're making a shot on goal");
         }
-        let moveInfo = [xCoord, wereMakingAShotOnGoal];
+        let timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
+        let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
         // debug(`Stored moveInfo(${JSON.stringify(moveInfo)}) in MOVE_TO_HISTORY.`);
