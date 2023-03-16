@@ -291,6 +291,8 @@ canvas {
       drawLine([0, contactRowY], [MAX_X, contactRowY], 'green');
       let xCoord = null;
       xCoord = (contactRowY - yInterceptVal) / slopeVal;
+      var distance = [x2, y2, xCoord, contactRowY];
+      console.log("Distance:", distance);
       debug("x coordinate:", xCoord);
       var bounceCount = 0;
       debug("bounce count:", bounceCount);
