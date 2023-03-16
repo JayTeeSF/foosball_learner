@@ -275,7 +275,7 @@ canvas {
       return finalDistance;
     }
 
-    function determineDistance(points, timeBetweenInputs, distanceFromRow, timeForHit) {
+    function determineDistance(distance, timeBetweenInputs, distanceFromRow, timeForHit) {
       return determineSpeed(Math.sqrt(Math.pow(distance[1] - distance[3], 2) + Math.pow(distance[0] - distance[2], 2)), timeBetweenInputs, distanceFromRow, timeForHit);
     }
 
