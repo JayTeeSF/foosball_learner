@@ -286,13 +286,13 @@ canvas {
     function shouldIHitYet(speed, dist, hitTime) {
       var timeTillImpact = dist / speed;
       if (timeTillImpact <= hitTime) {
-       timeToHit = true;
-       console.log(timeToHit);
-       return true;
+       var hitTime = true;
+       console.log(hitTime);
+       return hitTime;
      } else {
-       timeToHit = false;
-       console.log(timeToHit);
-       return false
+       var hitTime = false;
+       console.log(hitTime);
+       return hitTime
       }
     }
     
@@ -385,8 +385,7 @@ canvas {
           //shouldIHitTheBall(x1, x2, y1, y2, contactRowY, INTERVAL, timeForMotorMove);
           debug("we're making a shot on goal");
         }
-        var timeToHit = 0;
-        determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
+        var timeToHit = determineDistance([x1, y1, x2, y2], INTERVAL / 1000, calculateDistance(distance), 2);
         let moveInfo = [xCoord, wereMakingAShotOnGoal, timeToHit];
         debug("move info:", moveInfo);
         MOVE_TO_HISTORY.push(moveInfo);
