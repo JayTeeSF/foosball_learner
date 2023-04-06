@@ -257,3 +257,109 @@ Sure! Here's a brief explanation of how the code works:
     - It shows frame with ball position marked on it.
 
 I hope this helps! Let me know if you have any other questions or if there's anything else I can help you with!
+
+Certainly! Here's a sample code that uses JavaScript to detect and track a ball in real-time:
+
+```javascript
+// get access to the video stream
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(function(stream) {
+    // create a video element to display the stream
+    var video = document.createElement('video');
+    video.srcObject = stream;
+    document.body.appendChild(video);
+
+    // wait for the video metadata to load
+    video.addEventListener('loadedmetadata', function() {
+      // set up canvas for drawing
+      var canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      document.body.appendChild(canvas);
+      var ctx = canvas.getContext('2d');
+
+      // set up ball tracking variables
+      var ballRadius = 10;
+      var ballX = -1;
+      var ballY = -1;
+
+      // start tracking loop
+      setInterval(function() {
+        // draw current frame to canvas
+        ctx.drawImage(video, 0, 0);
+
+        // get image data from canvas
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // convert image data to HSV color space
+        var hsvData = rgbToHsv(imageData.data);
+
+        // threshold image to find green pixels
+        var maskData = threshold(hsvData, [29, 86, 6], [64, 255, 255]);
+
+        // find contours in mask data
+        var contours = findContours(maskData);
+
+        // find largest contour and its centroid
+        var largestContour = null;
+        var largestContourArea = -1;
+        for (var i = 0; i < contours.length; i++) {
+          var contourArea = cv.contourArea(contours[i]);
+          if (contourArea > largestContourArea) {
+            largestContourArea = contourArea;
+            largestContour = contours[i];
+          }
+        }
+        if (largestContour !== null) {
+          var moments = cv.moments(largestContour);
+          ballX = moments.m10 / moments.m00;
+          ballY = moments.m01 / moments.m00;
+
+          // draw circle around ball
+          ctx.beginPath();
+          ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+          ctx.strokeStyle = 'red';
+          ctx.stroke();
+        }
+      }, 1000 / 30); // run at 30 fps
+
+      // convert RGB color space to HSV color space
+      function rgbToHsv(rgb) {
+        var r = rgb[0] / 255;
+        var g = rgb[1] / 255;
+        var b = rgb[2] / 255;
+
+        var maxVal = Math.max(r, g, b);
+        var minVal = Math.min(r, g, b);
+        var deltaVal = maxVal - minVal;
+
+        var h;
+        if (deltaVal === 0) {
+          h = 0;
+        } else if (maxVal === r) {
+          h = ((g - b) / deltaVal) % 6;
+        } else if (maxVal === g) {
+          h = ((b - r) / deltaVal) + 2;
+        } else {
+          h = ((r - g) / deltaVal) + 4;
+        }
+        h *= 60;
+
+        if (h < 0) {
+          h += 360;
+        }
+
+        var s;
+        if (maxVal === 0) {
+          s = 0;
+        } else {
+          s = deltaVal / maxVal;
+        }
+
+        return [h, s * 100, maxVal * 100];
+      }
+
+      // threshold image based on HSV color range
+      function threshold(hsvData, lowerBound, upperBound) {
+        var maskData = new Uint8ClampedArray(hsvData.length);
+        for (var i = 0; i < hsvData.length;
