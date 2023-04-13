@@ -18,9 +18,10 @@
     const flipHorizontal = false;
 
     const imageElement = document.getElementById('image');
+    /*
     const canvas = document.getElementById('output');
     const ctx = canvas.getContext('2d');
-
+*/
     posenet.load().then(function(net) {
       return net.estimateSinglePose(imageElement, imageScaleFactor, flipHorizontal, outputStride)
     }).then(function(pose) {
@@ -30,7 +31,7 @@
       console.log(ballPosition);
 
       // Draw the pose keypoints onto the canvas
-      posenet.drawKeypoints(pose.keypoints, outputCanvas);
+      // posenet.drawKeypoints(pose.keypoints, outputCanvas);
     });
   </script>
 </body>
