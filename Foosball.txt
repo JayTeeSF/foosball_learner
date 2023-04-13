@@ -1,0 +1,21 @@
+// Load the MobileNetV2 model
+const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_100_224/classification/4');
+
+// Load an image
+const img = document.getElementById('img');
+
+// Preprocess the image
+const tensor = tf.browser.fromPixels(img)
+  .resizeNearestNeighbor([224, 224])
+  .toFloat()
+  .expandDims();
+
+// Make a prediction
+const predictions = await model.predict(tensor).data();
+
+// Print the top 5 predictions
+const top5 = Array.from(predictions)
+  .map((p, i) => ({ probability: p, className: IMAGENET_CLASSES[i] }))
+  .sort((a, b) => b.probability - a.probability)
+  .slice(0, 5);
+console.log(top5);
