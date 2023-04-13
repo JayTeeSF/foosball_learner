@@ -27,9 +27,10 @@
       // Get the position of the ball
       const ballPosition = pose.keypoints[0].position;
       console.log(ballPosition);
+      alert(ballPosition);
 
       // Draw the pose keypoints onto the canvas
-      posenet.drawKeypoints(pose.keypoints, outputCanvas);
+      //posenet.drawKeypoints(pose.keypoints, outputCanvas);
     });
   </script>
 </body>
