@@ -29,6 +29,12 @@
       // Get the position of the ball
       const ballPosition = pose.keypoints[0].position;
       console.log(ballPosition);
+      
+      let element = document.createElement("div");
+      element.innerHTML = `<p>${JSON.stringify(ballPosition)</p>`;
+      let b = document.getElementsByTagName("Body")[0];
+      b.append(element)
+
 
       // Draw the pose keypoints onto the canvas
       // posenet.drawKeypoints(pose.keypoints, outputCanvas);
