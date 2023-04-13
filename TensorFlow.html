@@ -31,7 +31,7 @@ canvas {
     const batched = normalized.expandDims(0);
 
     // Make predictions with the model
-    const predictions = await model.predict(batched).data();
+    const predictions = model.predict(batched).data();
 
     // Get the coordinates of the ball
     const x1 = predictions[0] * img.width;
