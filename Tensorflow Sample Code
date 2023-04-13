@@ -1,6 +1,3 @@
-Here is a sample script for using TensorFlow.js to find the coordinates of a ball in an image. This script uses the TensorFlow.js library and the Posenet model to detect the position of a ball in an image. You can modify this script to suit your needs.
-
-```javascript
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +7,7 @@ Here is a sample script for using TensorFlow.js to find the coordinates of a bal
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.5/dist/posenet.min.js"></script>
 </head>
 <body>
-  <img id='image' src='ball.jpg'/>
+  <img id='image' src='https://raw.githubusercontent.com/JayTeeSF/foosball_learner/main/IMG_0468.jpeg'/>
   <canvas id='output'></canvas>
 
   <script>
@@ -36,18 +33,3 @@ Here is a sample script for using TensorFlow.js to find the coordinates of a bal
   </script>
 </body>
 </html>
-```
-
-This script uses the Posenet model to detect the position of a ball in an image. The `estimateSinglePose()` function estimates the pose of a single person in an image and returns an object containing an array of keypoints that represent different parts of the body. The position of the ball can be found by accessing the first keypoint in this array.
-
-I hope this helps! Let me know if you have any other questions.
-
-Source: Conversation with Bing, 4/12/2023(1) 3D Pose Detection with MediaPipe BlazePose GHUM and TensorFlow.js. https://blog.tensorflow.org/2021/08/3d-pose-detection-with-mediapipe-blazepose-ghum-tfjs.html Accessed 4/12/2023.
-(2) TensorFlow Intro - W3School. https://www.w3schools.com/ai/ai_tensorflow_intro.asp Accessed 4/12/2023.
-(3) 3D Hand Pose with MediaPipe and TensorFlow.js. https://blog.tensorflow.org/2021/11/3D-handpose.html Accessed 4/12/2023.
-(4) tensorflow/tfjs-examples: Examples built with TensorFlow.js - Github. https://github.com/tensorflow/tfjs-examples Accessed 4/12/2023.
-(5) TensorFlow.js | Machine Learning for JavaScript Developers. https://www.tensorflow.org/js Accessed 4/12/2023.
-(6) TensorFlow.js demos. https://www.tensorflow.org/js/demos Accessed 4/12/2023.
-(7) Get started with TensorFlow.js. https://www.tensorflow.org/js/tutorials Accessed 4/12/2023.
-(8) Set up a TensorFlow.js project. https://www.tensorflow.org/js/tutorials/setup Accessed 4/12/2023.
-(9) GitHub - tensorflow/tfjs: A WebGL accelerated JavaScript library for .... https://github.com/tensorflow/tfjs Accessed 4/12/2023.
