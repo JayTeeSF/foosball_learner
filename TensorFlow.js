@@ -8,7 +8,9 @@ canvas {
   </style>
   <script>
     // Load the model
-    const model = await tf.loadGraphModel('model.json');
+    // Load the MobileNetV2 model
+    const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_100_224/classification/4');
+
 
     // Load the image
     const img = new Image();
