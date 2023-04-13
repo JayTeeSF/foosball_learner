@@ -19,22 +19,28 @@ canvas {
     const img = new Image();
     img.src = 'https://raw.githubusercontent.com/JayTeeSF/foosball_learner/main/IMG_0468.jpeg';
     img.decode();
+    console.log("Loaded image")
 
     // Create a tensor from the image
     const tensor = tf.browser.fromPixels(img);
-
+    console.log("Created tensor")
+    
     // Resize the tensor to match the input size of the model
     const resized = tf.image.resizeBilinear(tensor, [224, 224]);
+    console.log("Resizes tensor")
 
     // Normalize the pixel values
     const offset = tf.scalar(255);
     const normalized = resized.div(offset);
+    console.log("Normalize pixels")
 
     // Add a batch dimension to the tensor
     const batched = normalized.expandDims(0);
+    console.log("Add Batch Dimension")
 
     // Make predictions with the model
     const predictions = model.predict(batched).data();
+    console.log("Make predictions")
 
     // Get the coordinates of the ball
     const x1 = predictions[0] * img.width;
