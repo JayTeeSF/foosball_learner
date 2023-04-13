@@ -14,7 +14,7 @@ canvas {
 
     // Load the image
     const img = new Image();
-    img.src = 'ball.jpg';
+    img.src = 'https://raw.githubusercontent.com/JayTeeSF/foosball_learner/main/IMG_0468.jpeg';
     await img.decode();
 
     // Create a tensor from the image
