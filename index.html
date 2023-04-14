@@ -7,6 +7,9 @@ canvas {
 }
   </style>
   <script>
+    const imageScaleFactor = 0.5;
+    const outputStride = 16;
+    const flipHorizontal = false;
     const DEBUG = true; // adjust this to silence the console.log statements
     const SIZE = 300;
     const MAX_X = SIZE;
@@ -17,6 +20,7 @@ canvas {
     const INTERVAL = 42; //ms => 23 frames/sec
     const CONTEXT_ATTRS = { willReadFrequently: true };
     const COORD_HISTORY = [];
+    const ballPositions = [];
     const MOVE_TO_HISTORY = [];
     const timeForMotorMove = 1 //sec => still need to figure it out
     const DEFAULT_CONSTRAINTS = {video: true};
@@ -134,9 +138,23 @@ canvas {
       context.drawImage(video, startX, startY, minSize, minSize, 0, 0, MAX_X, MAX_Y);
 
       let image = context.getImageData(0, 0, MAX_X, MAX_Y);
-      let matrix = getPixelMatrix(image.data);
-      maybeSaveGrayScale(matrix, video, startX, startY, minSize, minSize);
-      processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
+      //let matrix = getPixelMatrix(image.data);
+      //maybeSaveGrayScale(matrix, video, startX, startY, minSize, minSize);
+      //processMatrix(matrix); // show the gray-scale images from the matrix (vs. the full rgb images direct from the camera)
+      determineBallCoords(image);
+    }
+    
+    function determineBallCoords(imageElement) {
+        posenet.load().then(function(net) {
+        return net.estimateSinglePose(imageElement, imageScaleFactor, flipHorizontal, outputStride)
+      }).then(function(pose) {
+       console.log(pose);
+       const ballPosition = pose.keypoints[0].position;
+       console.log(ballPosition);
+       ballPositions.push(ballPosition);
+       if (ballPositions.length > 1) {
+         calculateMove([ballPositions[0].x, ballPositions[0].y], [ballPositions[1].x, ballPositions[1].y);
+      });
     }
 
     function sumOfMatrix(matrix) {
