@@ -1,3 +1,7 @@
+## High School Science Fair Project
+
+Point camera at foosball table, use computer vision to track ball, predict where it will go, and use a robot to block it.
+
 goto: https://jayteesf.github.io/foosball_learner/
 github: https://github.com/JayTeeSF/foosball_learner
 
